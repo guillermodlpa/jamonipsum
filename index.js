@@ -1,4 +1,11 @@
+/**
+ * Jamon Ipsum
+ *
+ * Simple code for simple purposes.
+ */
 (function() {
+  'use strict';
+
   function getCount() {
     return document.getElementById('jamon-count-input').value;
   }

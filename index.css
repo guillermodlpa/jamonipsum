@@ -72,6 +72,8 @@ main {
 	width: 100%;
 	padding: 1rem;
 	flex-grow: 1;
+	max-width: 600px;
+	margin: 0 auto;
 }
 
 footer {
