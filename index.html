@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title>Jamon Ipsum</title>
+
+	<meta name="description" content="Generador de texto aleatorio en español.">
+	<meta name="author" content="Guillermo de la Puente">
+	<meta name='viewport' content='width=device-width, initial-scale=1.0' />
+
+	<link rel="stylesheet" type="text/css" href="./index.css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+</head>
+<body>
+	<header>
+		<h1>Jamón Ipsum</h1>
+	</header>
+
+	<main>
+		<div class="jamon-controls">
+			<div class="jamon-muticheckbox">
+				<label>
+					<input type="radio" name="type" checked="checked"/>
+					Párrafos
+				</label>
+				<label>
+					<input type="radio" name="type" />
+					Palabras
+				</label>
+			</div>
+
+			<div class="jamon-count-container">
+				<input type="number" value="30" id="jamon-count-input">
+			</div>
+		</div>
+		<div id="jamon-result">
+
+		</div>
+	</main>
+
+	<footer>
+		<a rel="license" href="http://www.opensource.org/licenses/mit-license.php">MIT Licensed</a>
+		<a rel="author" href="http://github.com/gpuenteallott/jamonipsum">GitHub</a>
+		<a rel="author" href="http://github.com/gpuenteallott">@gpuenteallott</a>
+	</footer>
+
+	<script src="./index.js"></script>
+</body>
+</html>
