@@ -98,6 +98,16 @@ h1 {
 }
 .jamon-count-container {
 	flex-grow: 1;
+	display: flex;
+	justify-content: space-around;
+}
+#jamon-button {
+	padding: 0 .8rem;
+	font-size: 1.2rem;
+	background-color: #ddd;
+	border: 2px solid #aaa;
+	border-radius: 3px;
+	cursor: pointer;
 }
 
 input[type="number"] {
@@ -106,8 +116,9 @@ input[type="number"] {
 	font-size: 1.2rem;
 	text-align: center;
 
-	background-color: #eee;
-	border: solid 2px #999;
+	background-color: #f9f9f9;
+	border: solid 1px #999;
+	border-radius: 3px;
 }
 
 input[type="radio"] {
@@ -119,6 +130,7 @@ input[type="radio"] {
 #jamon-result {
 	padding: 2rem 1rem 1rem 1rem;
 	color: #555;
+	line-height: 1.2;
 }
 
 footer a {
