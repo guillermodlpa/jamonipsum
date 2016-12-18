@@ -8,6 +8,4 @@ https://jamonipsum.es
 
 ejemplo:
 
-```
-Jamón ipsum señor fútbol canción calimocho, Quijote sus tomatito charanga y tapas los patata, tortilla enchufe pipas quinto pino, pan comido y quinto pino Penélope Cruz playita más fútbol mis croquetas estopa guitarra reconquista pan comido.
-```
+> Jamón ipsum señor fútbol canción calimocho, Quijote sus tomatito charanga y tapas los patata, tortilla enchufe pipas quinto pino, pan comido y quinto pino Penélope Cruz playita más fútbol mis croquetas estopa guitarra reconquista pan comido.
