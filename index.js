@@ -33,7 +33,7 @@
     var nonStops = 0;
 
     while (wordsAdded < count) {
-      lastTokens = tokens.slice(-10);
+      lastTokens = tokens.slice(-20).map(function(token) { return token.trim(); });
 
       newWord = getRandomWord(lastTokens);
 
@@ -224,8 +224,8 @@
     'canturreando',
     'vagueando',
     'haciéndose el loco',
-    'pega ojo',
-    'pan comido',
+    'no pega ojo',
+    'está pan comido',
     'tócate',
     'enchufe',
     'flamenco',
