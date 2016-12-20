@@ -62,6 +62,10 @@ body, html {
 	font-family: 'Open Sans', sans-serif;
 }
 
+body, a {
+	color: #000;
+}
+
 main, header, footer {
 	width: 100%;
 	max-width: 600px;
@@ -73,7 +77,7 @@ header {
 	border-bottom: 1px solid #ddd;
 }
 
-main {
+.main {
 	padding: 1rem;
 	flex-grow: 1;
 	max-width: 600px;
@@ -88,9 +92,16 @@ footer {
 	font-size: .9rem;
 }
 
-h1 {
+header h1, header h2 {
 	font-size: 2rem;
-	padding: 1rem .5rem;
+	padding: 1rem 0 .9rem .2rem;
+}
+.header-logo {
+	height: 2rem;
+}
+.header-sub {
+	color: #777;
+	font-style: italic;
 }
 
 .jamon-controls {
@@ -136,11 +147,40 @@ input[type="checkbox"] {
 	color: #555;
 	line-height: 1.2;
 }
-#jamon-result p {
-	margin-bottom: 1rem;
-}
 
 footer a {
-	color: #000;
 	margin: 0 .1rem;
+}
+
+#info-modal {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+}
+body.is-showing-info-modal #info-modal {
+	display: flex;
+}
+#info-modal-content {
+	position: relative;
+	width: 100%;
+	max-width: 25rem;
+	background-color: white;
+}
+#info-modal-close {
+	position: absolute;
+	top: 2rem;
+	right: 1rem;
+	text-decoration: none;
+	font-size: 1.5rem;
+	filter: grayscale(100%);
+	opacity: .5;
+}
+.main p {
+	margin-bottom: 1rem;
 }

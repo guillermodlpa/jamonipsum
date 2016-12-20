@@ -13,10 +13,11 @@
 </head>
 <body>
 	<header>
-		<h1>Jamón Ipsum</h1>
+		<h1>Jamón Ipsum <img src="./img/jamon-96.png" class="header-logo"/></h1>
+		<p class="header-sub">Generador de texto aleatorio en español.</p>
 	</header>
 
-	<main>
+	<main class="main">
 		<div class="jamon-controls">
 			<input type="number" value="60" id="jamon-count-input" />
 			<div class="jamon-muticheckbox">
@@ -35,16 +36,32 @@
 			</div>
 			<button id="jamon-button">🔄</button>
 		</div>
-		<div id="jamon-result">
-
-		</div>
+		<div id="jamon-result"></div>
 	</main>
 
 	<footer>
-		<a rel="license" href="http://www.opensource.org/licenses/mit-license.php">MIT Licensed</a>
+		<a id="info-link" href="#info">Información</a>
 		<a rel="author" href="http://github.com/gpuenteallott/jamonipsum">GitHub</a>
 		<a rel="author" href="http://github.com/gpuenteallott">@gpuenteallott</a>
 	</footer>
+
+	<section id="info-modal">
+		<div id="info-modal-content">
+			<header>
+				<h2>Jamón Ipsum <img src="./img/jamon-96.png" class="header-logo"/></h2>
+				<p class="header-sub">Generador de texto aleatorio en español.</p>
+			</header>
+
+			<div class="main">
+				<p>Inspirado en <a href="http://www.lipsum.com/">Lorem Ipsum</a>, generador de texto en latín con una <a href="http://www.lipsum.com/#Content">historia fascinante</a>.</p>
+
+				<p><a href="https://icons8.com/web-app/36788/jamon">Logo</a></p>
+				<p><a rel="license" href="http://www.opensource.org/licenses/mit-license.php">MIT Licensed</a></p>
+			</div>
+
+			<a id="info-modal-close" href="#">❌</a>
+		</div>
+	</section>
 
 	<script src="./index.js"></script>
 </body>

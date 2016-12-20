@@ -380,6 +380,25 @@
     }
   }
 
+  function bindInfoModal() {
+    var button = document.getElementById('info-link');
+    button && button.addEventListener('click', openInfoModal);
+
+    var closeModalBtn = document.getElementById('info-modal-close');
+    closeModalBtn && closeModalBtn.addEventListener('click', closeInfoModal);
+  }
+  function openInfoModal() {
+    var body = document.getElementsByTagName('BODY')[0];
+    if (!/is-showing-info-modal/.test(body.className)) {
+      body.className = (body.className || '') + ' is-showing-info-modal';
+    }
+  }
+  function closeInfoModal() {
+    var body = document.getElementsByTagName('BODY')[0];
+    body.className = (body.className || '').replace('is-showing-info-modal', '');
+  }
+
   bindGenerate();
+  bindInfoModal();
   jamonIpsum();
 }());
