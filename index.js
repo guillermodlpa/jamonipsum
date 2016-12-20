@@ -3,7 +3,7 @@
  *
  * Simple code for simple purposes.
  */
-(function() {
+(function () {
   'use strict';
 
   function getCount() {

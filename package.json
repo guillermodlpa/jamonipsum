@@ -1,0 +1,10 @@
+{
+  "name": "jamonipsum",
+  "version": "1.0.0",
+  "repository": "git@github.com:gpuenteallott/jamonipsum.git",
+  "author": "Guillermo de la Puente <g.puente.allott@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "eslint": "^3.12.2"
+  }
+}
