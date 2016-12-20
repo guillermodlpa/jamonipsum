@@ -6,30 +6,92 @@
 (function () {
   'use strict';
 
+  function getConfig() {
+    var config = {
+      availableWords: allWords,
+      availableArticles: allArticles,
+      availableConnectors: allConnectors,
+      availableStops: allStops,
+      initialTokens: initialTokens,
+      wordRepetitionThreshold: 20,
+      chancesOfUsingStop: .3,
+      minWordsBetweenStops: 3,
+      minWordsBetweenConnectors: 6,
+      chancesOfConnector: .3,
+      minWordsBetweenArticles: 2,
+      chancesOfArticle: .8,
+      paragraphs: [],
+    };
+
+    if (document.querySelector('input[name="emoji"]:checked')) {
+      config.availableWords = config.availableWords.concat(allEmojis);
+    }
+
+    var count = getCountInput().value;
+
+    if (document.querySelector('input[name="type"]:checked').value === 'words') {
+      config.paragraphs[0] = count;
+    } else {
+      config.paragraphs = [];
+      for (var i = 0; i < count; i++) {
+        config.paragraphs[i] = getRandInt(100, 50);
+      }
+    }
+
+    return config;
+  }
+  function getCountInput() {
+    return document.getElementById('jamon-count-input');
+  }
+
+  function jamonIpsum() {
+    var resultNode = document.getElementById('jamon-result');
+
+    var config = getConfig();
+    var tokens = generateTokensMultiParagraph(config);
+
+    resultNode.innerHTML = joinWithSpaces(tokens);
+  }
+  // function cloneArray(array) {
+  //   return array.slice();
+  // }
+  // function cloneObject(object) {
+  //   return JSON.parse(JSON.stringify(object));
+  // }
+
   function getCount() {
     return document.getElementById('jamon-count-input').value;
   }
   function getType() {
     return document.querySelector('input[name="type"]:checked').value;
   }
-  function getResultHTMLNode() {
-    return document.getElementById('jamon-result');
-  }
-  function bindGenerateButton() {
-    var button = document.getElementById('jamon-button');
-    button && button.addEventListener('click', jamonIpsum);
+
+  function generateTokensMultiParagraph(config) {
+    var tokens = [];
+
+    for (var i = 0; i < config.paragraphs.length; i++) {
+      var wordsInParagraph = config.paragraphs[i];
+
+      config.wordLimit = wordsInParagraph;
+
+      tokens = tokens.concat(
+        '<p>',
+        generateTokens(config),
+        '</p>'
+      );
+    }
+    return tokens;
   }
 
-  function jamonIpsum() {
-    var resultNode = getResultHTMLNode();
-    var tokens = generateTokens();
+  function generateTokens(config) {
+    var availableWords = config.availableWords;
+    var availableArticles = config.availableArticles
+    var availableConnectors = config.availableConnectors
+    var availableStops = config.availableStops;
+    var wordRepetitionThreshold = config.wordRepetitionThreshold;
+    var wordLimit = config.wordLimit;
 
-    resultNode.innerHTML = tokens.join('');
-  }
-
-  function generateTokens() {
-    var tokens = initialWords.slice();
-    var count = getCount();
+    var tokens = config.initialTokens.slice();
 
     var lastTokens = [];
     var wordsAdded = tokens.length;
@@ -39,86 +101,85 @@
     var nonArticles = 0;
     var nonStops = 0;
 
-    while (wordsAdded < count) {
-      lastTokens = tokens.slice(-20).map(function(token) { return token.trim(); });
+    while (wordsAdded < wordLimit) {
+      lastTokens = tokens.slice(-wordRepetitionThreshold).map(function(token) { return token.trim(); });
 
-      newWord = getRandomWord(lastTokens);
+      newWord = getRandomValue(availableWords, lastTokens, wordRepetitionThreshold);
 
       // If last char is a `.`, uppercase.
-      if (tokens[tokens.length - 1].slice(-2) === '. ') {
+      if (tokens[tokens.length - 1].slice(-2) === '.') {
         newWord = newWord.charAt(0).toUpperCase() + newWord.substr(1);
       }
 
       wordsAdded++;
 
-      var extraTokenType = getNextTokenType(count - wordsAdded, nonConnectors, nonArticles, nonStops);
+      var extraTokenType = getNextTokenType(
+        config,
+        wordLimit - wordsAdded,
+        nonConnectors,
+        nonArticles,
+        nonStops
+      );
       var extraToken;
 
       switch (extraTokenType) {
         case 'connector':
-          extraToken = getRandomConnector() + ' ';
+          extraToken = getRandomValue(availableConnectors);
           nonConnectors = 0;
           nonArticles++;
           wordsAdded++;
           nonStops++;
           break;
         case 'article':
-          extraToken = getRandomArticle() + ' ';
+          extraToken = getRandomValue(availableArticles);
           nonArticles = 0;
           nonConnectors++;
           wordsAdded++;
           nonStops++;
           break;
         case 'stop':
-          extraToken = getRandomStop() + ' ';
+          extraToken = getRandomValue(availableStops);
           nonConnectors++;
           nonArticles++;
           nonStops = 0;
           break;
         default:
-          extraToken = ' ';
           nonConnectors++;
           nonArticles++;
           nonStops++;
       }
 
-      tokens.push(newWord + extraToken);
+      tokens.push(newWord);
+      if (extraToken) {
+        tokens.push(extraToken);
+      }
     }
 
-    // Remove last whitespace.
-    tokens[tokens.length - 1] = tokens[tokens.length - 1].slice(0, -1);
     tokens.push('.');
 
     return tokens;
   }
 
-  var minWordsBetweenStops = 3;
-  var chancesOfStop = .2;
-  var minWordsBetweenConnectors = 6;
-  var chancesOfConnector = .2;
-  var minWordsBetweenArticles = 2;
-  var chancesOfArticle = .5;
-
-  function getNextTokenType(wordsLeft, nonConnectors, nonArticles, nonStops) {
+  function getNextTokenType(config, wordsLeft, nonConnectors, nonArticles, nonStops) {
     // Article.
     if (
       wordsLeft > 2 &&
-      nonArticles >= minWordsBetweenArticles &&
-      Math.random() > chancesOfArticle
+      nonArticles >= config.minWordsBetweenArticles &&
+      Math.random() > config.chancesOfArticle
     ) {
       return 'article';
     // Connector.
     } else if (
       wordsLeft > 6 &&
-      nonConnectors >= minWordsBetweenConnectors &&
-      Math.random() > chancesOfConnector
+      nonConnectors >= config.minWordsBetweenConnectors &&
+      Math.random() > config.chancesOfConnector
     ) {
       return 'connector';
     // Stop.
     } else if (
       wordsLeft > 6 &&
-      nonStops >= minWordsBetweenStops &&
-      Math.random() > chancesOfStop
+      nonStops >= config.minWordsBetweenStops &&
+      Math.random() > config.chancesOfStop
     ) {
       return 'stop';
     } else {
@@ -126,63 +187,68 @@
     }
   }
 
-  function getRandInt(limit) {
-    return Math.floor(Math.random() * limit);
+  function getRandInt(upperLimit, lowerLimit) {
+    lowerLimit || (lowerLimit = 0);
+    return lowerLimit + Math.floor(Math.random() * (upperLimit - lowerLimit));
   }
-
-  function getRandomStop() {
-    var rand = getRandInt(availableStops.length);
-    return availableStops[rand];
-  }
-  function getRandomConnector() {
-    var rand = getRandInt(availableConnectors.length);
-    return availableConnectors[rand];
-  }
-  function getRandomArticle() {
-    var rand = getRandInt(availableArticles.length);
-    return availableArticles[rand];
-  }
-
-  function getRandomWord(lastTokens) {
+  function getRandomValue(array, lastChoicesArray, limit) {
     var rand;
     var word;
     var attempts = 0;
 
     do {
-      rand = getRandInt(availableWords.length);
-      word = availableWords[rand];
+      rand = getRandInt(array.length);
+      word = array[rand];
       attempts++;
-    } while (lastTokens.indexOf(word) !== -1 && attempts < 20)
+    } while (lastChoicesArray && lastChoicesArray.indexOf(word) !== -1 && attempts < limit)
 
     return word;
   }
 
-  var availableStops = [
+  function joinWithSpaces(tokens) {
+    var result = '';
+    for (var i = 0; i < tokens.length; i++) {
+      if (tokens[i] === '.' || tokens[i] === ',') {
+        result += tokens[i];
+      } else {
+        result += ' ' + tokens[i];
+      }
+    }
+    return result;
+  }
+
+  var allStops = [
     '.',
     ',',
   ];
 
-  var availableConnectors = [
-    ' y',
-    ' pero',
+  var allConnectors = [
+    'y',
+    'pero',
   ];
 
-  var availableArticles = [
-    ' la',
-    ' el',
-    ' las',
-    ' los',
-    ' mis',
-    ' tus',
-    ' sus',
-    ' tu',
-    ' mi',
-    ' un',
-    ' una',
+  var allArticles = [
+    'la',
+    'el',
+    'las',
+    'los',
+    'mis',
+    'tus',
+    'sus',
+    'tu',
+    'mi',
+    'un',
+    'una',
+    'a',
+    'con',
+    'mucho de',
   ];
 
-  var initialWords = ['Jamón ', 'ipsum '];
-  var availableWords = [
+  var initialTokens = [
+    'Jamón',
+    'ipsum',
+  ];
+  var allWords = [
     'jamón',
     'estopa',
     'tortilla',
@@ -217,7 +283,7 @@
     'tío',
     'tía',
     'botellón',
-    'chollazo',
+    'vaya chollazo',
     'flipado',
     'mola mazo',
     'cocido',
@@ -239,8 +305,69 @@
     'Almodóvar',
     'Penélope Cruz',
     'Rey',
+    'jodido',
+    'fiesta',
+    'siesta',
+    'comino',
+    'lia',
+    'nuestra comunidad',
+    'vecinos',
+    'chulapo',
+    'escanciando sidra',
+    'cabra',
+    'epa',
+    'corral',
+    'lacasitos',
+    'movida',
+    'bingo',
+    'chinchón',
+    'rumbeo',
   ];
 
-  bindGenerateButton();
+  var allEmojis = [
+    '🍕',
+    '🇪🇸',
+    '🍊',
+    '🍻',
+    '🍳',
+    '🍷',
+    '🎾',
+    '🏁',
+    '🎊',
+    '🐣',
+    '👍',
+    '✌',
+    '🌟',
+    '👀 ',
+    '👅',
+    '💪',
+    '💩',
+    '😎',
+    '😴',
+    '😱',
+    '😘',
+    '😻',
+  ];
+
+  function bindGenerate() {
+    var button = document.getElementById('jamon-button');
+    button && button.addEventListener('click', jamonIpsum);
+
+    var inputsHTMLCollection = document.getElementsByTagName('INPUT');
+    for (var i = 0; i < inputsHTMLCollection.length; i++) {
+      inputsHTMLCollection[i].addEventListener('change', function() {
+        if (this.name === 'type') {
+          if (this.value === 'words') {
+            getCountInput().value = getCountInput().value * 10;
+          } else {
+            getCountInput().value = Math.ceil(getCountInput().value / 10);
+          }
+        }
+        jamonIpsum();
+      });
+    }
+  }
+
+  bindGenerate();
   jamonIpsum();
 }());

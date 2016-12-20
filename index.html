@@ -18,21 +18,22 @@
 
 	<main>
 		<div class="jamon-controls">
+			<input type="number" value="60" id="jamon-count-input" />
 			<div class="jamon-muticheckbox">
 				<label>
-					<input type="radio" name="type" checked="checked" />
+					<input type="radio" name="type" value="words" checked="checked" />
 					Palabras
 				</label>
 				<label>
-					<input type="radio" name="type" disabled="disabled" />
+					<input type="radio" name="type" value="paragraphs" />
 					Párrafos
 				</label>
+				<label>
+					<input type="checkbox" name="emoji" />
+					Emojis
+				</label>
 			</div>
-
-			<div class="jamon-count-container">
-				<input type="number" value="30" id="jamon-count-input" />
-				<button id="jamon-button">-></button>
-			</div>
+			<button id="jamon-button">🔄</button>
 		</div>
 		<div id="jamon-result">
 
