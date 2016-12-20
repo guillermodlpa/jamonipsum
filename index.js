@@ -111,9 +111,7 @@
         newWord = newWord.charAt(0).toUpperCase() + newWord.substr(1);
       }
 
-      wordsAdded++;
-
-      var extraTokenType = getNextTokenType(
+      var extraTokenType = getNextExtraTokenType(
         config,
         wordLimit - wordsAdded,
         nonConnectors,
@@ -127,14 +125,12 @@
           extraToken = getRandomValue(availableConnectors);
           nonConnectors = 0;
           nonArticles++;
-          wordsAdded++;
           nonStops++;
           break;
         case 'article':
           extraToken = getRandomValue(availableArticles);
           nonArticles = 0;
           nonConnectors++;
-          wordsAdded++;
           nonStops++;
           break;
         case 'stop':
@@ -144,13 +140,22 @@
           nonStops = 0;
           break;
         default:
-          nonConnectors++;
-          nonArticles++;
-          nonStops++;
+          //
       }
 
+      var addedCount = countWordsInString(newWord);
+      if (addedCount > wordLimit - wordsAdded) {
+        continue;
+      }
+      wordsAdded += countWordsInString(newWord);
       tokens.push(newWord);
+
       if (extraToken) {
+        addedCount = countWordsInString(extraToken);
+        if (addedCount > wordLimit - wordsAdded) {
+          continue;
+        }
+        wordsAdded += countWordsInString(extraToken);
         tokens.push(extraToken);
       }
     }
@@ -160,49 +165,55 @@
     return tokens;
   }
 
-  function getNextTokenType(config, wordsLeft, nonConnectors, nonArticles, nonStops) {
-    // Article.
+  function getNextExtraTokenType(config, wordsLeft, nonConnectors, nonArticles, nonStops) {
+    var possibilities = [];
     if (
       wordsLeft > 2 &&
       nonArticles >= config.minWordsBetweenArticles &&
       Math.random() > config.chancesOfArticle
     ) {
-      return 'article';
-    // Connector.
+      possibilities.push('article');
     } else if (
       wordsLeft > 6 &&
       nonConnectors >= config.minWordsBetweenConnectors &&
       Math.random() > config.chancesOfConnector
     ) {
-      return 'connector';
-    // Stop.
+      possibilities.push('connector');
     } else if (
       wordsLeft > 6 &&
       nonStops >= config.minWordsBetweenStops &&
       Math.random() > config.chancesOfStop
     ) {
-      return 'stop';
-    } else {
-      return undefined; // whitespace.
+      possibilities.push('stop');
     }
+
+    return (possibilities.length
+      ? possibilities[getRandInt(possibilities.length - 1)]
+      : null
+    );
   }
 
   function getRandInt(upperLimit, lowerLimit) {
     lowerLimit || (lowerLimit = 0);
-    return lowerLimit + Math.floor(Math.random() * (upperLimit - lowerLimit));
+    return lowerLimit + Math.floor(Math.random() * (upperLimit + 1 - lowerLimit));
   }
+
   function getRandomValue(array, lastChoicesArray, limit) {
     var rand;
     var word;
     var attempts = 0;
 
     do {
-      rand = getRandInt(array.length);
+      rand = getRandInt(array.length - 1);
       word = array[rand];
       attempts++;
     } while (lastChoicesArray && lastChoicesArray.indexOf(word) !== -1 && attempts < limit)
 
     return word;
+  }
+
+  function countWordsInString(string) {
+    return string.replace(/\.\,/, '').split(' ').length;
   }
 
   function joinWithSpaces(tokens) {
@@ -322,6 +333,7 @@
     'bingo',
     'chinchón',
     'rumbeo',
+    'año',
   ];
 
   var allEmojis = [
