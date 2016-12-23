@@ -11,6 +11,7 @@ import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import del from 'del';
 
+// Compiles styl files into css.
 gulp.task('css', () => (
   gulp
     .src('src/css/index.styl')
@@ -21,6 +22,7 @@ gulp.task('css', () => (
     .pipe(gulp.dest('dist/'))
 ));
 
+// Minifies html.
 gulp.task('html', () => (
   gulp
     .src('src/html/index.html')
@@ -29,6 +31,7 @@ gulp.task('html', () => (
     .pipe(gulp.dest('dist/'))
 ));
 
+// Transpiles and bundles js with rollup.
 gulp.task('js', () => (
   rollup({
       entry: 'src/js/index.js',
@@ -48,12 +51,14 @@ gulp.task('js', () => (
     .pipe(gulp.dest('dist/'))
 ));
 
+// Copies assets to the dist folder.
 gulp.task('assets', () => (
   gulp
     .src('assets/**/*')
     .pipe(gulp.dest('dist/'))
 ));
 
+// Clears out the dist folder from any previous build.
 gulp.task('clean-dist', () => (
   del([
     'dist/**/*',
@@ -61,12 +66,14 @@ gulp.task('clean-dist', () => (
   ])
 ));
 
+// Watch task for css, js and html.
 gulp.task('watch', () => {
     gulp.watch(['src/**/*.css', 'src/**/*.styl'], ['css']);
     gulp.watch(['src/**/*.js', 'src/**/*.jsx'], ['js']);
     gulp.watch('src/**/*.html', ['html']);
 });
 
+// Builds all in dist. Call with --watch to start watching.
 gulp.task('default', ['clean-dist'], () => {
   gulp.start(['html','js', 'css', 'assets']);
 
