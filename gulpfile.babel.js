@@ -4,8 +4,8 @@ import size from 'gulp-size';
 import stylus from 'gulp-stylus';
 import htmlmin from 'gulp-htmlmin';
 import gutil from 'gulp-util';
-import babel from 'gulp-babel';
 import rollup from 'rollup-stream';
+import rollupBabel from 'rollup-plugin-babel';
 import uglify from 'gulp-uglify';
 import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
@@ -33,12 +33,16 @@ gulp.task('js', () => (
   rollup({
       entry: 'src/js/index.js',
       format: 'iife',
+      plugins: [
+        rollupBabel({
+          exclude: 'node_modules/**'
+        })
+      ]
    })
+    .on('error', gutil.log)
     .pipe(source('index.js', 'src/js'))
     .pipe(buffer())
-    .pipe(babel({
-        presets: ['es2015']
-    }))
+    // Comment out uglify to see rollup output.
     .pipe(uglify())
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
@@ -50,7 +54,7 @@ gulp.task('assets', () => (
     .pipe(gulp.dest('dist/'))
 ));
 
-gulp.task('clear-dist', () => (
+gulp.task('clean-dist', () => (
   del([
     'dist/**/*',
     '!dist/.gitkeep'
@@ -63,7 +67,7 @@ gulp.task('watch', () => {
     gulp.watch('src/**/*.html', ['html']);
 });
 
-gulp.task('default', ['clear-dist'], () => {
+gulp.task('default', ['clean-dist'], () => {
   gulp.start(['html','js', 'css', 'assets']);
 
   if (gutil.env.watch) {
