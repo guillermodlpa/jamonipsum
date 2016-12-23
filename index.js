@@ -19,7 +19,7 @@
       minWordsBetweenConnectors: 6,
       chancesOfConnector: .3,
       minWordsBetweenArticles: 2,
-      chancesOfArticle: .8,
+      chancesOfArticle: .5,
       paragraphs: [],
     };
 
@@ -140,7 +140,9 @@
           nonStops = 0;
           break;
         default:
-          //
+          nonArticles++;
+          nonConnectors++;
+          nonStops++;
       }
 
       var addedCount = countWordsInString(newWord);
