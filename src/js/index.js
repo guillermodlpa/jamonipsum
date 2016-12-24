@@ -19,6 +19,10 @@ function getEmojiValue() {
 function getBody() {
   return document.getElementsByTagName('BODY')[0];
 }
+function getMainLogo() {
+  const h1 = document.getElementsByTagName('H1')[0];
+  return h1.getElementsByClassName('header-logo')[0];
+}
 function renderResult(html) {
   const resultNode = document.getElementById('jamon-result');
   resultNode && (resultNode.innerHTML = html);
@@ -43,6 +47,21 @@ function bindGenerate() {
   }
 }
 
+function bindLogo() {
+  const logo = getMainLogo();
+  logo && logo.addEventListener('click', rotate.bind(this, logo));
+}
+
+function rotate(el) {
+  if (!el || el.className.indexOf('is-rotating') > -1) {
+    return;
+  }
+  el.className += ' is-rotating';
+  setTimeout(() => {
+    el.className = el.className.replace('is-rotating', '').trim();
+  }, 5000);
+}
+
 const infoModal = (function(document, body) {
   return {
     bind: function() {
@@ -61,7 +80,7 @@ const infoModal = (function(document, body) {
       body.className = (body.className || '').replace('is-showing-info-modal', '');
     },
   }
-}(document, getBody()))
+}(document, getBody()));
 
 
 function readUiAndGenerate() {
@@ -78,5 +97,6 @@ function readUiAndGenerate() {
 }
 
 bindGenerate();
+bindLogo();
 infoModal.bind();
 readUiAndGenerate();
