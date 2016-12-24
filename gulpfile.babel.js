@@ -27,12 +27,12 @@ gulp.task('css', () => (
 gulp.task('html', () => (
   gulp
     .src('src/html/index.html')
-    // Hash on assets. eg: '{{{./index.css}}}' -> 'index.css?a1b2c3'
+    // Hash on assets. eg: 'index.css' -> 'index.css?a1b2c3'
     .pipe(replace(
-      /\{\{\{(\S*)\}\}\}/g,
+      /(\.js|\.css)\b/g,
       '$1' + '?' + Math.random().toString(36).substr(2, 5)
     ))
-    .pipe(htmlmin({ collapseWhitespace: true }))
+    // .pipe(htmlmin({ collapseWhitespace: true }))
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
 ));
