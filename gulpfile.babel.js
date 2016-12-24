@@ -32,7 +32,7 @@ gulp.task('html', () => (
       /(\.js|\.css)\b/g,
       '$1' + '?' + Math.random().toString(36).substr(2, 5)
     ))
-    // .pipe(htmlmin({ collapseWhitespace: true }))
+    .pipe(htmlmin({ collapseWhitespace: true }))
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
 ));
