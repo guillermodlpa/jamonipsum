@@ -13,6 +13,7 @@
     "gulp": "^3.9.1",
     "gulp-copy": "^1.0.0",
     "gulp-htmlmin": "^3.0.0",
+    "gulp-replace": "^0.5.4",
     "gulp-size": "^2.1.0",
     "gulp-stylus": "^2.6.0",
     "gulp-uglify": "^2.0.0",

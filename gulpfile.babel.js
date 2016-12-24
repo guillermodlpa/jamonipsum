@@ -7,6 +7,7 @@ import gutil from 'gulp-util';
 import rollup from 'rollup-stream';
 import rollupBabel from 'rollup-plugin-babel';
 import uglify from 'gulp-uglify';
+import replace from 'gulp-replace';
 import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import del from 'del';
@@ -26,7 +27,12 @@ gulp.task('css', () => (
 gulp.task('html', () => (
   gulp
     .src('src/html/index.html')
-    .pipe(htmlmin({collapseWhitespace: true}))
+    // Hash on assets. eg: '{{{./index.css}}}' -> 'index.css?a1b2c3'
+    .pipe(replace(
+      /\{\{\{(\S*)\}\}\}/g,
+      '$1' + '?' + Math.random().toString(36).substr(2, 5)
+    ))
+    .pipe(htmlmin({ collapseWhitespace: true }))
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
 ));
