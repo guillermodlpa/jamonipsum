@@ -5,7 +5,7 @@ $sectionBorder=1px solid #ddd
 $desktopBreakpoint=600px
 $desktopSidebarWidth=39%
 $desktopIpsumWidth=(100% - $desktopSidebarWidth)
-$sidebarBgColor=#eee
+$sidebarBgColor=#F2EEEE
 
 *
 	box-sizing border-box
@@ -37,6 +37,10 @@ footer
 
 	@media screen and (min-width: $desktopBreakpoint)
 		width $desktopSidebarWidth
+		border-right $sectionBorder
+
+		> div
+			margin-bottom 2rem
 
 #ipsum-result-container
 	flex-grow 1
@@ -99,9 +103,12 @@ h2
 	justify-content center
 	min-height 5rem
 	padding 1rem
+	border-bottom $sectionBorder
 
 	@media screen and (min-width: $desktopBreakpoint)
 		flex-grow 1
+		flex-direction column
+		font-size 1.2rem
 
 .jamon-muticheckbox
 	display flex
@@ -112,17 +119,6 @@ h2
 	flex-direction column
 	margin-right 2rem
 
-#jamon-button
-	padding 0 .8rem
-	font-size 1.5rem
-	background-color transparent
-	border-width 0px
-	cursor pointer
-
-.jamon-button-container
-	flex-grow 1
-	text-align right
-
 #jamon-count-input
 	width 3.5rem
 	height 100%
@@ -132,6 +128,11 @@ h2
 	background-color #f9f9f9
 	border solid 1px #999
 	border-radius 3px
+
+	@media screen and (min-width: $desktopBreakpoint)
+		font-size 2rem
+		padding .5rem .3rem
+		width 4.5rem
 
 label
 	user-select none

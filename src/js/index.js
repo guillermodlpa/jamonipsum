@@ -49,7 +49,10 @@ function bindGenerate() {
 
 function bindLogo() {
   const logo = getMainLogo();
-  logo && logo.addEventListener('click', rotate.bind(this, logo));
+  logo && logo.addEventListener('click', () => {
+    rotate(logo);
+    readUiAndGenerate();
+  });
 }
 
 function rotate(el) {
