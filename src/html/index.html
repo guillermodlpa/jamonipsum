@@ -17,32 +17,33 @@
 		<p class="header-sub">Generador de texto aleatorio en español.</p>
 	</header>
 
-	<main>
-		<div class="jamon-controls">
-			<div>
-				<input type="number" value="60" id="jamon-count-input" />
-			</div>
-			<div class="jamon-muticheckbox">
-				<div>
-					<label>
-						<input type="radio" name="type" value="words" checked="checked" />
-						Palabras
-					</label>
-					<label>
-						<input type="radio" name="type" value="paragraphs" />
-						Párrafos
-					</label>
-				</div>
-			</div>
+	<div id="jamon-controls">
+		<div>
+			<input type="number" value="6" id="jamon-count-input" min="1" max="100" />
+		</div>
+		<div class="jamon-muticheckbox">
 			<div>
 				<label>
-					<input type="checkbox" name="emoji" />
-					👍
+					<input type="radio" name="type" value="paragraphs" checked="checked" />
+					Párrafos
+				</label>
+				<label>
+					<input type="radio" name="type" value="words" />
+					Palabras
 				</label>
 			</div>
 		</div>
+		<div>
+			<label>
+				<input type="checkbox" name="emoji" />
+				👍
+			</label>
+		</div>
+	</div>
+
+	<div id="ipsum-result-container">
 		<div id="jamon-result"></div>
-	</main>
+	</div>
 
 	<footer>
 		<a id="info-link" href="#info">Información</a>

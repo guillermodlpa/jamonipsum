@@ -3,6 +3,9 @@
 
 $sectionBorder=1px solid #ddd
 $desktopBreakpoint=600px
+$desktopSidebarWidth=39%
+$desktopIpsumWidth=(100% - $desktopSidebarWidth)
+$sidebarBgColor=#F2EEEE
 
 *
 	box-sizing border-box
@@ -15,18 +18,46 @@ html
 body
 	display flex
 	flex-direction column
+	align-items center
 	font-family 'Open Sans', sans-serif
+
+	@media screen and (min-width: $desktopBreakpoint)
+		align-items flex-start
 
 body
 a
 	color #000
 
-main
 header
 footer
+#jamon-controls
 	width 100%
 	max-width 600px
-	margin 0 auto
+	background-color $sidebarBgColor
+
+	@media screen and (min-width: $desktopBreakpoint)
+		width $desktopSidebarWidth
+		border-right $sectionBorder
+
+		> div
+			margin-bottom 2rem
+
+#ipsum-result-container
+	flex-grow 1
+	padding 2rem
+	color #555
+	line-height 1.2
+	width 100%
+	max-width 600px
+
+	@media screen and (min-width: $desktopBreakpoint)
+		position absolute
+		right 0
+		top 0
+		width $desktopIpsumWidth
+		height 100vh
+		padding 5rem 3rem
+		overflow auto
 
 header
 .modal-header
@@ -37,7 +68,6 @@ header
 	@media screen and (min-width: $desktopBreakpoint)
 		padding-top 2rem
 
-main
 .modal-main
 	padding 1rem
 	flex-grow 1
@@ -66,12 +96,19 @@ h2
 	color #777
 	font-style italic
 
-.jamon-controls
+#jamon-controls
 	display flex
 	flex-wrap wrap
 	align-items center
 	justify-content center
+	min-height 5rem
 	padding 1rem
+	border-bottom $sectionBorder
+
+	@media screen and (min-width: $desktopBreakpoint)
+		flex-grow 1
+		flex-direction column
+		font-size 1.2rem
 
 .jamon-muticheckbox
 	display flex
@@ -82,17 +119,6 @@ h2
 	flex-direction column
 	margin-right 2rem
 
-#jamon-button
-	padding 0 .8rem
-	font-size 1.5rem
-	background-color transparent
-	border-width 0px
-	cursor pointer
-
-.jamon-button-container
-	flex-grow 1
-	text-align right
-
 #jamon-count-input
 	width 3.5rem
 	height 100%
@@ -102,6 +128,11 @@ h2
 	background-color #f9f9f9
 	border solid 1px #999
 	border-radius 3px
+
+	@media screen and (min-width: $desktopBreakpoint)
+		font-size 2rem
+		padding .5rem .3rem
+		width 4.5rem
 
 label
 	user-select none
@@ -115,11 +146,6 @@ input
 
 	&[type="checkbox"]
 		margin-top .5rem
-
-#jamon-result
-	padding 1rem
-	color #555
-	line-height 1.2
 
 footer
 	a
@@ -170,7 +196,15 @@ footer
 	filter grayscale(100%)
 	opacity .5
 
-main
 .modal-main
+#jamon-controls
+#ipsum-result-container
 	p
 		margin-bottom 1rem
+
+
+input[type=number]
+	&::-webkit-inner-spin-button
+	&::-webkit-outer-spin-button
+		-webkit-appearance none
+		margin 0
