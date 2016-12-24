@@ -1,11 +1,13 @@
-@import 'reset'
-@import 'animations/rotate';
 
 $sectionBorder=1px solid #ddd
 $desktopBreakpoint=600px
 $desktopSidebarWidth=39%
 $desktopIpsumWidth=(100% - $desktopSidebarWidth)
 $sidebarBgColor=#F2EEEE
+
+@import 'reset'
+@import 'modal'
+@import 'animations/rotate';
 
 *
 	box-sizing border-box
@@ -20,6 +22,10 @@ body
 	flex-direction column
 	align-items center
 	font-family 'Open Sans', sans-serif
+
+	p
+		margin-bottom 1rem
+		line-height 1.2
 
 	@media screen and (min-width: $desktopBreakpoint)
 		align-items flex-start
@@ -46,7 +52,6 @@ footer
 	flex-grow 1
 	padding 2rem
 	color #555
-	line-height 1.2
 	width 100%
 	max-width 600px
 
@@ -56,24 +61,16 @@ footer
 		top 0
 		width $desktopIpsumWidth
 		height 100vh
-		padding 5rem 3rem
+		padding 3rem
 		overflow auto
 
 header
-.modal-header
 	padding 1rem
 	border-bottom $sectionBorder
 
 header
 	@media screen and (min-width: $desktopBreakpoint)
 		padding-top 2rem
-
-.modal-main
-	padding 1rem
-	flex-grow 1
-	justify-content center
-	max-width 600px
-	margin 0 auto
 
 footer
 	padding 1rem
@@ -88,12 +85,15 @@ h2
 
 .header-logo
 	height 2rem
+
+.pointerable
 	cursor pointer
 	user-select none
 
 .header-sub
 	color #777
 	font-style italic
+	margin-bottom 0
 
 #jamon-controls
 	display flex
@@ -149,58 +149,6 @@ input
 footer
 	a
 		margin 0 .1rem
-
-#info-modal
-	display none
-	position fixed
-	top 0
-	left 0
-	right 0
-	bottom 0
-
-	&:before
-		content ' '
-		width 100vw
-		height 100vh
-		opacity .5
-		background-color #fff
-
-	body.is-showing-info-modal &
-		display flex
-
-#info-modal-content
-	background-color white
-	position fixed
-	top 50%
-	left 50%
-	transform translate(-50%, -50%)
-	width 90%
-	max-width 27rem
-	padding 0
-	border 1px solid #bbb
-	border-radius 3px
-	justify-content center
-	align-items center
-	background-color white
-
-	@media screen and (min-width: $desktopBreakpoint)
-		padding 1.5rem
-
-#info-modal-close
-	position absolute
-	top 1rem
-	right 1rem
-	text-decoration none
-	font-size 1.5rem
-	filter grayscale(100%)
-	opacity .5
-
-.modal-main
-#jamon-controls
-#ipsum-result-container
-	p
-		margin-bottom 1rem
-
 
 input[type=number]
 	&::-webkit-inner-spin-button

@@ -1,0 +1,54 @@
+
+#info-modal
+	display none
+	position fixed
+	top 0
+	left 0
+	right 0
+	bottom 0
+
+	&:before
+		content ' '
+		width 100vw
+		height 100vh
+		opacity .5
+		background-color #fff
+
+	body.is-showing-info-modal &
+		display flex
+
+#info-modal-content
+	background-color white
+	position fixed
+	top 50%
+	left 50%
+	transform translate(-50%, -50%)
+	width 90%
+	max-width 27rem
+	padding 0
+	border 1px solid #bbb
+	border-radius 3px
+	justify-content center
+	align-items center
+	background-color white
+
+#info-modal-close
+	position absolute
+	top 1rem
+	right 1rem
+	text-decoration none
+	font-size 1.5rem
+	filter grayscale(100%)
+	opacity .5
+
+.modal-header
+	background-color $sidebarBgColor
+	padding 1rem
+	border-bottom $sectionBorder
+
+.modal-main
+	padding 1rem
+	flex-grow 1
+	justify-content center
+	max-width 600px
+	margin 0 auto
