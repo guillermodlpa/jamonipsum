@@ -1,6 +1,7 @@
 @import 'reset'
 
 $sectionBorder=1px solid #ddd
+$desktopBreakpoint=600px
 
 *
 	box-sizing border-box
@@ -27,10 +28,16 @@ footer
 	margin 0 auto
 
 header
+.modal-header
 	padding 1rem
 	border-bottom $sectionBorder
 
-.main
+header
+	@media screen and (min-width: $desktopBreakpoint)
+		padding-top 2rem
+
+main
+.modal-main
 	padding 1rem
 	flex-grow 1
 	justify-content center
@@ -44,11 +51,10 @@ footer
 	text-align center
 	font-size .9rem
 
-header
-	h1
-	h2
-		font-size 2rem
-		padding 0rem 0 .9rem .2rem
+h1
+h2
+	font-size 2rem
+	padding 0rem 0 .9rem .2rem
 
 .header-logo
 	height 2rem
@@ -142,22 +148,26 @@ footer
 	transform translate(-50%, -50%)
 	width 90%
 	max-width 27rem
-	padding 1.5rem
+	padding 0
 	border 1px solid #bbb
 	border-radius 3px
 	justify-content center
 	align-items center
 	background-color white
 
+	@media screen and (min-width: $desktopBreakpoint)
+		padding 1.5rem
+
 #info-modal-close
 	position absolute
-	top 2rem
+	top 1rem
 	right 1rem
 	text-decoration none
 	font-size 1.5rem
 	filter grayscale(100%)
 	opacity .5
 
-.main
+main
+.modal-main
 	p
 		margin-bottom 1rem

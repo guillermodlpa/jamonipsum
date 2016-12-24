@@ -17,7 +17,7 @@
 		<p class="header-sub">Generador de texto aleatorio en español.</p>
 	</header>
 
-	<main class="main">
+	<main>
 		<div class="jamon-controls">
 			<div>
 				<input type="number" value="60" id="jamon-count-input" />
@@ -52,18 +52,28 @@
 
 	<section id="info-modal">
 		<div id="info-modal-content">
-			<header>
+			<div class="modal-header">
 				<h2>Jamón Ipsum <img src="./img/jamon-96.png" class="header-logo"/></h2>
 				<p class="header-sub">Generador de texto aleatorio en español.</p>
-			</header>
-
-			<div class="main">
-				<p>Inspirado en <a href="http://www.lipsum.com/">Lorem Ipsum</a>, generador de texto en latín con una <a href="http://www.lipsum.com/#Content">historia fascinante</a>.</p>
-
-				<p><a href="https://icons8.com/web-app/36788/jamon">Logo</a></p>
-				<p><a rel="license" href="http://www.opensource.org/licenses/mit-license.php">MIT Licensed</a></p>
 			</div>
 
+			<div class="modal-main">
+				<p>
+					Inspirado en <a href="http://www.lipsum.com/">Lorem Ipsum</a>, generador de texto en latín con una <a href="http://www.lipsum.com/#Content">historia fascinante</a>
+				</p>
+				<p>
+					Creado por
+					<a rel="author" href="http://github.com/gpuenteallot">
+						Guillermo de la Puente
+					</a>
+				</p>
+				<p>
+					<a rel="license" href="http://www.opensource.org/licenses/mit-license.php">MIT Licensed</a>
+				</p>
+				<p>
+					<a href="https://icons8.com/web-app/36788/jamon">Logo</a>
+				</p>
+			</div>
 			<a id="info-modal-close" href="#">❌</a>
 		</div>
 	</section>
