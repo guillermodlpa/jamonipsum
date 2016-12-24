@@ -1,154 +1,165 @@
-@import 'reset';
+@import 'reset'
 
-* {
-	box-sizing: border-box;
-}
+$sectionBorder=1px solid #ddd
 
-body, html {
-	height: 100%;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
+*
+	box-sizing border-box
 
-	font-family: 'Open Sans', sans-serif;
-}
+body
+html
+	height 100%
+	width 100%
 
-body, a {
-	color: #000;
-}
+body
+	display flex
+	flex-direction column
+	font-family 'Open Sans', sans-serif
 
-main, header, footer {
-	width: 100%;
-	max-width: 600px;
-	margin: 0 auto;
-}
+body
+a
+	color #000
 
-header {
-	padding: 1rem;
-	border-bottom: 1px solid #ddd;
-}
+main
+header
+footer
+	width 100%
+	max-width 600px
+	margin 0 auto
 
-.main {
-	padding: 1rem;
-	flex-grow: 1;
-	max-width: 600px;
-	margin: 0 auto;
-}
+header
+	padding 1rem
+	border-bottom $sectionBorder
 
-footer {
-	height: 4rem;
-	padding: 1rem;
-	border-top: 1px solid #ddd;
-	text-align: center;
-	font-size: .9rem;
-}
+.main
+	padding 1rem
+	flex-grow 1
+	justify-content center
+	max-width 600px
+	margin 0 auto
 
-header h1, header h2 {
-	font-size: 2rem;
-	padding: 1rem 0 .9rem .2rem;
-}
-.header-logo {
-	height: 2rem;
-}
-.header-sub {
-	color: #777;
-	font-style: italic;
-}
+footer
+	height 4rem
+	padding 1rem
+	border-top $sectionBorder
+	text-align center
+	font-size .9rem
 
-.jamon-controls {
-	display: flex;
-	align-items: center;
-}
-.jamon-muticheckbox {
-	display: flex;
-	flex-grow: 1;
-	padding-left: 1rem;
-}
-.jamon-muticheckbox > div {
-	display: flex;
-	flex-direction: column;
-	margin-right: 2rem;
-}
-#jamon-button {
-	padding: 0 .8rem;
-	font-size: 1.5rem;
-	background-color: transparent;
-	border-width: 0px;
-	cursor: pointer;
-}
+header
+	h1
+	h2
+		font-size 2rem
+		padding 0rem 0 .9rem .2rem
 
-#jamon-count-input {
-	width: 3rem;
-	height: 100%;
-	font-size: 1.2rem;
-	text-align: center;
+.header-logo
+	height 2rem
 
-	background-color: #f9f9f9;
-	border: solid 1px #999;
-	border-radius: 3px;
-}
+.header-sub
+	color #777
+	font-style italic
 
-input[type="radio"], input[type="checkbox"] {
-	width: 1rem;
-	height: 1rem;
-	font-size: 1.2rem;
-}
-input[type="checkbox"] {
-	margin-top: .5rem;
-}
+.jamon-controls
+	display flex
+	flex-wrap wrap
+	padding 1rem
+	width 100%
+	margin 0 auto
+	max-width 30rem
+	align-items center
 
-#jamon-result {
-	padding: 2rem 1rem 1rem 1rem;
-	color: #555;
-	line-height: 1.2;
-}
+.jamon-muticheckbox
+	display flex
+	padding-left 1rem
 
-footer a {
-	margin: 0 .1rem;
-}
+.jamon-muticheckbox > div
+	display flex
+	flex-direction column
+	margin-right 2rem
 
-#info-modal {
-	display: none;
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-}
-#info-modal:before {
-	content: ' ';
-	width: 100vw;
-	height: 100vh;
-	opacity: .5;
-	background-color: #fff;
-}
-body.is-showing-info-modal #info-modal {
-	display: flex;
-}
-#info-modal-content {
-	background-color: white;
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 90%;
-	max-width: 27rem;
-	padding: 1.5rem;
-	border: 1px solid #bbb;
-	border-radius: 3px;
-	justify-content: center;
-	align-items: center;
-	background-color: white;
-}
-#info-modal-close {
-	position: absolute;
-	top: 2rem;
-	right: 1rem;
-	text-decoration: none;
-	font-size: 1.5rem;
-	filter: grayscale(100%);
-	opacity: .5;
-}
-.main p {
-	margin-bottom: 1rem;
-}
+#jamon-button
+	padding 0 .8rem
+	font-size 1.5rem
+	background-color transparent
+	border-width 0px
+	cursor pointer
+
+.jamon-button-container
+	flex-grow 1
+	text-align right
+
+#jamon-count-input
+	width 3.5rem
+	height 100%
+	font-size 1.2rem
+	padding .3rem
+	text-align center
+	background-color #f9f9f9
+	border solid 1px #999
+	border-radius 3px
+
+label
+	user-select none
+
+input
+	&[type="radio"]
+	&[type="checkbox"]
+		width 1rem
+		height 1rem
+		font-size 1.2rem
+
+	&[type="checkbox"]
+		margin-top .5rem
+
+#jamon-result
+	padding 1rem
+	color #555
+	line-height 1.2
+
+footer
+	a
+		margin 0 .1rem
+
+#info-modal
+	display none
+	position fixed
+	top 0
+	left 0
+	right 0
+	bottom 0
+
+	&:before
+		content ' '
+		width 100vw
+		height 100vh
+		opacity .5
+		background-color #fff
+
+	body.is-showing-info-modal &
+		display flex
+
+#info-modal-content
+	background-color white
+	position fixed
+	top 50%
+	left 50%
+	transform translate(-50%, -50%)
+	width 90%
+	max-width 27rem
+	padding 1.5rem
+	border 1px solid #bbb
+	border-radius 3px
+	justify-content center
+	align-items center
+	background-color white
+
+#info-modal-close
+	position absolute
+	top 2rem
+	right 1rem
+	text-decoration none
+	font-size 1.5rem
+	filter grayscale(100%)
+	opacity .5
+
+.main
+	p
+		margin-bottom 1rem
