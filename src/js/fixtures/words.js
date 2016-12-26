@@ -100,4 +100,7 @@ export default [
   'ancha es Castilla.',
   'gato encerrado',
   'sangre fría',
+  'roña',
+  'roñica',
+  'vamos',
 ];

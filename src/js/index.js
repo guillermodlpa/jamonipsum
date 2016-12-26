@@ -1,5 +1,21 @@
 
 import generator from './generator';
+import {
+  addClass,
+  removeClass,
+  rotate,
+} from './utils';
+import {
+  getCountInput,
+  getTypeInputValue,
+  getEmojiValue,
+  getBody,
+  getMainLogo,
+  renderResult,
+  getAllInputs,
+  getModalCloseButton,
+  getModalLink,
+} from './dom';
 
 /**
  * Jamon Ipsum
@@ -7,32 +23,8 @@ import generator from './generator';
  * Simple code for simple purposes.
  */
 
-function getCountInput() {
-  return document.getElementById('jamon-count-input');
-}
-function getTypeInputValue() {
-  return document.querySelector('input[name="type"]:checked').value;
-}
-function getEmojiValue() {
-  return !!document.querySelector('input[name="emoji"]:checked');
-}
-function getBody() {
-  return document.getElementsByTagName('BODY')[0];
-}
-function getMainLogo() {
-  const h1 = document.getElementsByTagName('H1')[0];
-  return h1.getElementsByClassName('header-logo')[0];
-}
-function renderResult(html) {
-  const resultNode = document.getElementById('jamon-result');
-  resultNode && (resultNode.innerHTML = html);
-}
-
 function bindGenerate() {
-  var button = document.getElementById('jamon-button');
-  button && button.addEventListener('click', jamonIpsum);
-
-  var inputsHTMLCollection = document.getElementsByTagName('INPUT');
+  var inputsHTMLCollection = getAllInputs();
   for (var i = 0; i < inputsHTMLCollection.length; i++) {
     inputsHTMLCollection[i].addEventListener('change', function() {
       if (this.name === 'type') {
@@ -55,32 +47,22 @@ function bindLogo() {
   });
 }
 
-function rotate(el) {
-  if (!el || el.className.indexOf('is-rotating') > -1) {
-    return;
-  }
-  el.className += ' is-rotating';
-  setTimeout(() => {
-    el.className = el.className.replace('is-rotating', '').trim();
-  }, 5000);
-}
-
 const infoModal = (function(document, body) {
+  const bodyClass = 'is-showing-info-modal';
+
   return {
     bind: function() {
-      var button = document.getElementById('info-link');
+      var button = getModalLink();
       button && button.addEventListener('click', this.open);
 
-      var closeModalBtn = document.getElementById('info-modal-close');
+      var closeModalBtn = getModalCloseButton();
       closeModalBtn && closeModalBtn.addEventListener('click', this.close);
     },
     open: function() {
-      if (!/is-showing-info-modal/.test(body.className)) {
-        body.className = (body.className || '') + ' is-showing-info-modal';
-      }
+      addClass(body, bodyClass);
     },
     close: function() {
-      body.className = (body.className || '').replace('is-showing-info-modal', '');
+      removeClass(body, bodyClass);
     },
   }
 }(document, getBody()));
@@ -91,9 +73,9 @@ function readUiAndGenerate() {
   const type = getTypeInputValue();
   const emojis = getEmojiValue();
   const result = generator({
-    count: count,
-    type: type,
-    emojis: emojis,
+    count,
+    type,
+    emojis,
   });
 
   renderResult(result);
