@@ -1,8 +1,6 @@
 
 import generator from './generator';
 import {
-  addClass,
-  removeClass,
   rotate,
 } from './utils';
 import {
@@ -13,9 +11,10 @@ import {
   getMainLogo,
   renderResult,
   getAllInputs,
-  getModalCloseButton,
-  getModalLink,
+  getOpenModalLink,
+  getModalEl,
 } from './dom';
+import Modal from './modal/index';
 
 function readUiAndGenerate() {
   const count = getCountInput().value;
@@ -60,27 +59,16 @@ function bindLogo() {
   });
 }
 
-const infoModal = ((document, body) => {
-  const bodyClass = 'is-showing-info-modal';
+function setUpInfoModal() {
+  const modalEl = getModalEl();
 
-  return {
-    bind: () => {
-      const button = getModalLink();
-      button.addEventListener('click', infoModal.open);
+  const modal = new Modal(modalEl, getBody());
 
-      const closeModalBtn = getModalCloseButton();
-      closeModalBtn.addEventListener('click', infoModal.close);
-    },
-    open: () => {
-      addClass(body, bodyClass);
-    },
-    close: () => {
-      removeClass(body, bodyClass);
-    },
-  };
-})(document, getBody());
+  const link = getOpenModalLink();
+  link.addEventListener('click', modal.open);
+}
 
 bindGenerate();
 bindLogo();
-infoModal.bind();
+setUpInfoModal();
 readUiAndGenerate();

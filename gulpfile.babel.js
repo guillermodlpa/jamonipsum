@@ -3,7 +3,7 @@ import gulp from 'gulp';
 import size from 'gulp-size';
 import stylus from 'gulp-stylus';
 import htmlmin from 'gulp-htmlmin';
-import gutil from 'gulp-util';
+import gutil, { noop } from 'gulp-util';
 import rollup from 'rollup-stream';
 import rollupBabel from 'rollup-plugin-babel';
 import uglify from 'gulp-uglify';
@@ -12,12 +12,20 @@ import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import del from 'del';
 
+/**
+ * For dev:
+ * $ gulp --dev
+ *
+ * For prod:
+ * gulp
+ */
+
 // Compiles styl files into css.
 gulp.task('css', () => (
   gulp
     .src('src/css/index.styl')
     .pipe(stylus({
-      compress: true,
+      compress: !gutil.env.dev,
     }))
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
@@ -32,7 +40,9 @@ gulp.task('html', () => (
       /(\.js|\.css)\b/g,
       `$1?${Math.random().toString(36).substr(2, 5)}`,
     ))
-    .pipe(htmlmin({ collapseWhitespace: true }))
+    .pipe(gutil.env.dev ? noop() : htmlmin({
+      collapseWhitespace: true,
+    }))
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
 ));
@@ -51,8 +61,7 @@ gulp.task('js', () => (
     .on('error', gutil.log)
     .pipe(source('index.js', 'src/js'))
     .pipe(buffer())
-    // Comment out uglify to see rollup output.
-    .pipe(uglify())
+    .pipe(gutil.env.dev ? noop() : uglify())
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
 ));
@@ -83,7 +92,7 @@ gulp.task('watch', () => {
 gulp.task('default', ['clean-dist'], () => {
   gulp.start(['html', 'js', 'css', 'assets']);
 
-  if (gutil.env.watch) {
+  if (gutil.env.watch || gutil.env.dev) {
     gulp.start('watch');
   }
 });

@@ -22,10 +22,10 @@ export function renderResult(html) {
   }
 }
 
-export function getModalCloseButton() {
-  return document.getElementById('info-modal-close');
+export function getModalEl() {
+  return document.getElementById('info-modal');
 }
-export function getModalLink() {
+export function getOpenModalLink() {
   return document.getElementById('info-link');
 }
 
