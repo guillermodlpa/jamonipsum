@@ -4,28 +4,25 @@ import allConnectors from './fixtures/connectors';
 import allEmojis from './fixtures/emojis';
 import allStops from './fixtures/stops';
 import allWords from './fixtures/words';
+import { mandatoryParameter } from './utils';
+
+export default function({
+  count = mandatoryParameter(),
+  type = mandatoryParameter(),
+  useEmojis = mandatoryParameter(),
+} = {}) {
+  var config = getConfig(count, type, useEmojis);
+  var tokens = generateTokensMultiParagraph(config);
+
+  return joinWithSpaces(tokens);
+}
 
 const initialTokens = [
   'Jamón',
   'ipsum',
 ];
 
-export default function({
-  count = mandatory(),
-  type = mandatory(),
-  emojis = mandatory(),
-} = {}) {
-  var config = getConfig(count, type, emojis);
-  var tokens = generateTokensMultiParagraph(config);
-
-  return joinWithSpaces(tokens);
-}
-
-function mandatory() {
-  throw new Error('Missing parameter');
-}
-
-function getConfig(count, type, emojis) {
+function getConfig(count, type, useEmojis) {
   var config = {
     availableWords: allWords,
     availableArticles: allArticles,
@@ -42,7 +39,7 @@ function getConfig(count, type, emojis) {
     paragraphs: [],
   };
 
-  if (document.querySelector('input[name="emoji"]:checked')) {
+  if (useEmojis) {
     config.availableWords = config.availableWords.concat(allEmojis);
   }
 
@@ -110,7 +107,7 @@ function generateTokens(config) {
       nonArticles,
       nonStops
     );
-    var extraToken;
+    var extraToken = null;
 
     switch (extraTokenType) {
       case 'connector':

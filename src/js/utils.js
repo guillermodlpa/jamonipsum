@@ -24,3 +24,7 @@ export function rotate(el) {
     removeClass(el, rotateClass);
   }, 5000);
 }
+
+export function mandatoryParameter() {
+  throw new Error('Missing parameter');
+}

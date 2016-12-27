@@ -71,11 +71,11 @@ const infoModal = (function(document, body) {
 function readUiAndGenerate() {
   const count = getCountInput().value;
   const type = getTypeInputValue();
-  const emojis = getEmojiValue();
+  const useEmojis = getEmojiValue();
   const result = generator({
     count,
     type,
-    emojis,
+    useEmojis,
   });
 
   renderResult(result);
