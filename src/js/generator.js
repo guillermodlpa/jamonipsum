@@ -4,18 +4,11 @@ import allConnectors from './fixtures/connectors';
 import allEmojis from './fixtures/emojis';
 import allStops from './fixtures/stops';
 import allWords from './fixtures/words';
-import { mandatoryParameter } from './utils';
-
-export default function({
-  count = mandatoryParameter(),
-  type = mandatoryParameter(),
-  useEmojis = mandatoryParameter(),
-} = {}) {
-  var config = getConfig(count, type, useEmojis);
-  var tokens = generateTokensMultiParagraph(config);
-
-  return joinWithSpaces(tokens);
-}
+import {
+  mandatoryParameter,
+  getRandInt,
+  countWords,
+} from './utils';
 
 const initialTokens = [
   'Jamón',
@@ -23,19 +16,19 @@ const initialTokens = [
 ];
 
 function getConfig(count, type, useEmojis) {
-  var config = {
+  const config = {
     availableWords: allWords,
     availableArticles: allArticles,
     availableConnectors: allConnectors,
     availableStops: allStops,
-    initialTokens: initialTokens,
+    initialTokens,
     wordRepetitionThreshold: 20,
-    chancesOfUsingStop: .3,
+    chancesOfUsingStop: 0.3,
     minWordsBetweenStops: 3,
     minWordsBetweenConnectors: 6,
-    chancesOfConnector: .3,
+    chancesOfConnector: 0.3,
     minWordsBetweenArticles: 2,
-    chancesOfArticle: .5,
+    chancesOfArticle: 0.5,
     paragraphs: [],
   };
 
@@ -47,7 +40,7 @@ function getConfig(count, type, useEmojis) {
     config.paragraphs[0] = count;
   } else {
     config.paragraphs = [];
-    for (var i = 0; i < count; i++) {
+    for (let i = 0; i < count; i++) {
       config.paragraphs[i] = getRandInt(100, 50);
     }
   }
@@ -55,109 +48,22 @@ function getConfig(count, type, useEmojis) {
   return config;
 }
 
-function generateTokensMultiParagraph(config) {
-  var tokens = [];
+function getRandomToken(array, lastChoicesArray, limit) {
+  let rand;
+  let word;
+  let attempts = 0;
 
-  for (var i = 0; i < config.paragraphs.length; i++) {
-    var wordsInParagraph = config.paragraphs[i];
+  do {
+    rand = getRandInt(array.length - 1);
+    word = array[rand];
+    attempts++;
+  } while (lastChoicesArray && lastChoicesArray.indexOf(word) !== -1 && attempts < limit);
 
-    config.wordLimit = wordsInParagraph;
-
-    tokens = tokens.concat(
-      '<p>',
-      generateTokens(config),
-      '</p>'
-    );
-  }
-  return tokens;
-}
-
-function generateTokens(config) {
-  var availableWords = config.availableWords;
-  var availableArticles = config.availableArticles
-  var availableConnectors = config.availableConnectors
-  var availableStops = config.availableStops;
-  var wordRepetitionThreshold = config.wordRepetitionThreshold;
-  var wordLimit = config.wordLimit;
-
-  var tokens = config.initialTokens.slice();
-
-  var lastTokens = [];
-  var wordsAdded = tokens.length;
-  var newWord;
-
-  var nonConnectors = 0;
-  var nonArticles = 0;
-  var nonStops = 0;
-
-  while (wordsAdded < wordLimit) {
-    lastTokens = tokens.slice(-wordRepetitionThreshold).map(function(token) { return token.trim(); });
-
-    newWord = getRandomValue(availableWords, lastTokens, wordRepetitionThreshold);
-
-    // If last char is a `.`, uppercase.
-    if (tokens[tokens.length - 1].slice(-2) === '.') {
-      newWord = newWord.charAt(0).toUpperCase() + newWord.substr(1);
-    }
-
-    var extraTokenType = getNextExtraTokenType(
-      config,
-      wordLimit - wordsAdded,
-      nonConnectors,
-      nonArticles,
-      nonStops
-    );
-    var extraToken = null;
-
-    switch (extraTokenType) {
-      case 'connector':
-        extraToken = getRandomValue(availableConnectors);
-        nonConnectors = 0;
-        nonArticles++;
-        nonStops++;
-        break;
-      case 'article':
-        extraToken = getRandomValue(availableArticles);
-        nonArticles = 0;
-        nonConnectors++;
-        nonStops++;
-        break;
-      case 'stop':
-        extraToken = getRandomValue(availableStops);
-        nonConnectors++;
-        nonArticles++;
-        nonStops = 0;
-        break;
-      default:
-        nonArticles++;
-        nonConnectors++;
-        nonStops++;
-    }
-
-    var addedCount = countWordsInString(newWord);
-    if (addedCount > wordLimit - wordsAdded) {
-      continue;
-    }
-    wordsAdded += countWordsInString(newWord);
-    tokens.push(newWord);
-
-    if (extraToken) {
-      addedCount = countWordsInString(extraToken);
-      if (addedCount > wordLimit - wordsAdded) {
-        continue;
-      }
-      wordsAdded += countWordsInString(extraToken);
-      tokens.push(extraToken);
-    }
-  }
-
-  tokens.push('.');
-
-  return tokens;
+  return word;
 }
 
 function getNextExtraTokenType(config, wordsLeft, nonConnectors, nonArticles, nonStops) {
-  var possibilities = [];
+  const possibilities = [];
   if (
     wordsLeft > 2 &&
     nonArticles >= config.minWordsBetweenArticles &&
@@ -184,37 +90,127 @@ function getNextExtraTokenType(config, wordsLeft, nonConnectors, nonArticles, no
   );
 }
 
-function getRandInt(upperLimit, lowerLimit) {
-  lowerLimit || (lowerLimit = 0);
-  return lowerLimit + Math.floor(Math.random() * (upperLimit + 1 - lowerLimit));
+function generateTokens(config) {
+  const availableWords = config.availableWords;
+  const availableArticles = config.availableArticles;
+  const availableConnectors = config.availableConnectors;
+  const availableStops = config.availableStops;
+  const wordRepetitionThreshold = config.wordRepetitionThreshold;
+  const wordLimit = config.wordLimit;
+
+  const tokens = config.initialTokens.slice();
+
+  let lastTokens = [];
+  let wordsAdded = tokens.length;
+  let newWord;
+
+  let nonConnectors = 0;
+  let nonArticles = 0;
+  let nonStops = 0;
+
+  while (wordsAdded < wordLimit) {
+    lastTokens = tokens.slice(-wordRepetitionThreshold).map(token => (token.trim()));
+
+    newWord = getRandomToken(availableWords, lastTokens, wordRepetitionThreshold);
+
+    // If last char is a `.`, uppercase.
+    if (tokens[tokens.length - 1].slice(-2) === '.') {
+      newWord = newWord.charAt(0).toUpperCase() + newWord.substr(1);
+    }
+
+    const extraTokenType = getNextExtraTokenType(
+      config,
+      wordLimit - wordsAdded,
+      nonConnectors,
+      nonArticles,
+      nonStops,
+    );
+    let extraToken = null;
+
+    switch (extraTokenType) {
+      case 'connector':
+        extraToken = getRandomToken(availableConnectors);
+        nonConnectors = 0;
+        nonArticles++;
+        nonStops++;
+        break;
+      case 'article':
+        extraToken = getRandomToken(availableArticles);
+        nonArticles = 0;
+        nonConnectors++;
+        nonStops++;
+        break;
+      case 'stop':
+        extraToken = getRandomToken(availableStops);
+        nonConnectors++;
+        nonArticles++;
+        nonStops = 0;
+        break;
+      default:
+        nonArticles++;
+        nonConnectors++;
+        nonStops++;
+    }
+
+    let addedCount = countWords(newWord);
+    if (addedCount > wordLimit - wordsAdded) {
+      continue;
+    }
+    wordsAdded += countWords(newWord);
+    tokens.push(newWord);
+
+    if (extraToken) {
+      addedCount = countWords(extraToken);
+      if (addedCount > wordLimit - wordsAdded) {
+        continue;
+      }
+      wordsAdded += countWords(extraToken);
+      tokens.push(extraToken);
+    }
+  }
+
+  tokens.push('.');
+
+  return tokens;
 }
 
-function getRandomValue(array, lastChoicesArray, limit) {
-  var rand;
-  var word;
-  var attempts = 0;
+function generateTokensMultiParagraph(config) {
+  let tokens = [];
 
-  do {
-    rand = getRandInt(array.length - 1);
-    word = array[rand];
-    attempts++;
-  } while (lastChoicesArray && lastChoicesArray.indexOf(word) !== -1 && attempts < limit)
+  for (let i = 0; i < config.paragraphs.length; i++) {
+    const wordsInParagraph = config.paragraphs[i];
 
-  return word;
-}
+    const thisConfig = Object.assign({}, config);
+    thisConfig.wordLimit = wordsInParagraph;
 
-function countWordsInString(string) {
-  return string.replace(/\.\,/, '').split(' ').length;
+    tokens = tokens.concat(
+      '<p>',
+      generateTokens(thisConfig),
+      '</p>',
+    );
+  }
+  return tokens;
 }
 
 function joinWithSpaces(tokens) {
-  var result = '';
-  for (var i = 0; i < tokens.length; i++) {
+  let result = '';
+  for (let i = 0; i < tokens.length; i++) {
     if (tokens[i] === '.' || tokens[i] === ',') {
-      result += tokens[i];
+      result = `${result}${tokens[i]}`;
     } else {
-      result += ' ' + tokens[i];
+      result = `${result} ${tokens[i]}`;
     }
   }
   return result;
+}
+
+export default function ({
+  count = mandatoryParameter(),
+  type = mandatoryParameter(),
+  useEmojis = mandatoryParameter(),
+} = {}) {
+  const config = getConfig(count, type, useEmojis);
+  const tokens = generateTokensMultiParagraph(config);
+
+  return joinWithSpaces(tokens);
 }

@@ -30,7 +30,7 @@ gulp.task('html', () => (
     // Hash on assets. eg: 'index.css' -> 'index.css?a1b2c3'
     .pipe(replace(
       /(\.js|\.css)\b/g,
-      '$1' + '?' + Math.random().toString(36).substr(2, 5)
+      `$1?${Math.random().toString(36).substr(2, 5)}`,
     ))
     .pipe(htmlmin({ collapseWhitespace: true }))
     .pipe(size({ showFiles: true }))
@@ -40,14 +40,14 @@ gulp.task('html', () => (
 // Transpiles and bundles js with rollup.
 gulp.task('js', () => (
   rollup({
-      entry: 'src/js/index.js',
-      format: 'iife',
-      plugins: [
-        rollupBabel({
-          exclude: 'node_modules/**'
-        })
-      ]
-   })
+    entry: 'src/js/index.js',
+    format: 'iife',
+    plugins: [
+      rollupBabel({
+        exclude: 'node_modules/**',
+      }),
+    ],
+  })
     .on('error', gutil.log)
     .pipe(source('index.js', 'src/js'))
     .pipe(buffer())
@@ -68,20 +68,20 @@ gulp.task('assets', () => (
 gulp.task('clean-dist', () => (
   del([
     'dist/**/*',
-    '!dist/.gitkeep'
+    '!dist/.gitkeep',
   ])
 ));
 
 // Watch task for css, js and html.
 gulp.task('watch', () => {
-    gulp.watch(['src/**/*.css', 'src/**/*.styl'], ['css']);
-    gulp.watch(['src/**/*.js', 'src/**/*.jsx'], ['js']);
-    gulp.watch('src/**/*.html', ['html']);
+  gulp.watch(['src/**/*.css', 'src/**/*.styl'], ['css']);
+  gulp.watch(['src/**/*.js', 'src/**/*.jsx'], ['js']);
+  gulp.watch('src/**/*.html', ['html']);
 });
 
 // Builds all in dist. Call with --watch to start watching.
 gulp.task('default', ['clean-dist'], () => {
-  gulp.start(['html','js', 'css', 'assets']);
+  gulp.start(['html', 'js', 'css', 'assets']);
 
   if (gutil.env.watch) {
     gulp.start('watch');

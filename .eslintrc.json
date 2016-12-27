@@ -2,5 +2,13 @@
     "env": {
         "browser": true
     },
-    "extends": "babel-eslint"
+    "extends": "airbnb",
+    "rules": {
+        "no-plusplus": "off",
+        "no-continue": "off",
+        "no-param-reassign": "off",
+        "no-mixed-operators": ["error", {
+            "allowSamePrecedence": true
+        }]
+    }
 }

@@ -17,7 +17,9 @@ export function getMainLogo() {
 }
 export function renderResult(html) {
   const resultNode = document.getElementById('jamon-result');
-  resultNode && (resultNode.innerHTML = html);
+  if (resultNode) {
+    resultNode.innerHTML = html;
+  }
 }
 
 export function getModalCloseButton() {
@@ -30,3 +32,4 @@ export function getModalLink() {
 export function getAllInputs() {
   return document.getElementsByTagName('INPUT');
 }
+
