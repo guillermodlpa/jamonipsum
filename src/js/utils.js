@@ -28,14 +28,3 @@ export function rotate(el) {
 export function mandatoryParameter() {
   throw new Error('Missing parameter');
 }
-
-export function getRandInt(upperLimit, lowerLimit) {
-  if (!lowerLimit) {
-    lowerLimit = 0;
-  }
-  return lowerLimit + Math.floor(Math.random() * (upperLimit - lowerLimit + 1));
-}
-
-export function countWords(string) {
-  return string.replace(/\.,/, '').split(' ').length;
-}
