@@ -12,6 +12,8 @@ import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import del from 'del';
 
+import { gaTrackingId } from './config';
+
 /**
  * For dev:
  * $ gulp --dev
@@ -40,8 +42,14 @@ gulp.task('html', () => (
       /(\.js|\.css)\b/g,
       `$1?${Math.random().toString(36).substr(2, 5)}`,
     ))
+    // GA tracking ID loaded from config.
+    .pipe(!gaTrackingId ? noop() : replace(
+      /UA-XXXXXXXX-X/g,
+      gaTrackingId,
+    ))
     .pipe(gutil.env.dev ? noop() : htmlmin({
       collapseWhitespace: true,
+      removeComments: true,
     }))
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
