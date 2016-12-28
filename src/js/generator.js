@@ -16,8 +16,8 @@ const initialTokens = [
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
-function endsWithDot(string) {
-  return /\./.test(string.slice(-1));
+function isEndOfSentence(string) {
+  return /\.|\!/.test(string.slice(-1));
 }
 function countWords(string) {
   const matches = string.match(/\w+/g);
@@ -119,7 +119,7 @@ function getRandomTokenFromConfig(config, {
 
 function capitalizeTokens(tokens) {
   for (let i = 0; i < tokens.length; i++) {
-    if (i === 0 || endsWithDot(tokens[i - 1])) {
+    if (i === 0 || isEndOfSentence(tokens[i - 1])) {
       tokens[i] = capitalize(tokens[i]);
     }
   }
