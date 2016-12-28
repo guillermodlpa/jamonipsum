@@ -1,21 +1,25 @@
 
-$sectionBorder=1px solid #ddd
 $desktopBreakpoint=600px
 $desktopSidebarWidth=30rem
 $desktopIpsumWidth="calc(100% - %s)" % $desktopSidebarWidth
 
 $bodyBgColor=#FFFFFF
-$sidebarBgColor=#F2EEEE
+$sidebarBgColor=#FAB03F
+$sidebarLayerBgColor=shade($sidebarBgColor, 15%)
+$borderColor=#E3732E
 
 $fontColor=#000000
-$subtitleColor=#777777
+$subtitleColor=#912916
+$linkColor=$subtitleColor
 
 $headerSectionHeight=8rem
 $footerSectionHeight=2.9rem
 
-$bigFontSize=2rem
+$bigFontSize=2.1rem
 $medFontSize=1.2rem
 $smallFontSize=.9rem
+
+$sectionBorder=1px solid $borderColor
 
 $h1FontFamily='Marko One', serif;
 $contentFontFamily='Open Sans', sans-serif
@@ -55,7 +59,6 @@ footer
 #jamon-controls
 	width 100%
 	max-width 600px
-	background-color $sidebarBgColor
 
 	@media screen and (min-width: $desktopBreakpoint)
 		width $desktopSidebarWidth
@@ -87,6 +90,7 @@ header
 	padding 1rem
 	border-bottom $sectionBorder
 	text-align center
+	background-color $sidebarBgColor
 
 header
 	@media screen and (min-width: $desktopBreakpoint)
@@ -100,18 +104,29 @@ footer
 	border-top $sectionBorder
 	text-align center
 	font-size $smallFontSize
+	background-color $sidebarBgColor
 
 	a
 		margin 0 .1rem
+		color $linkColor
 
 h1
 h2
 	font-family $h1FontFamily
-	font-size $bigFontSize
 	padding 0rem 0 1rem .2rem
 
-.header-logo
-	height 2rem
+h1
+	font-size $bigFontSize
+	.header-logo
+		height $bigFontSize
+h2
+	font-size $medFontSize
+	.header-logo
+		height $medFontSize
+	@media screen and (min-width: $desktopBreakpoint)
+		font-size $bigFontSize
+		.header-logo
+			height $bigFontSize
 
 .pointerable
 	cursor pointer
@@ -130,6 +145,7 @@ h2
 	min-height 5rem
 	padding 1rem
 	border-bottom $sectionBorder
+	background-color $sidebarLayerBgColor
 
 	@media screen and (min-width: $desktopBreakpoint)
 		flex-grow 1
@@ -152,8 +168,8 @@ h2
 	font-size $medFontSize
 	padding .3rem
 	text-align center
-	background-color #f9f9f9
-	border solid 1px #999
+	background-color #fafafa
+	border solid 1px $borderColor
 	border-radius 3px
 
 	@media screen and (min-width: $desktopBreakpoint)
@@ -179,3 +195,6 @@ input[type=number]
 	&::-webkit-outer-spin-button
 		-webkit-appearance none
 		margin 0
+
+.emoji-text
+	text-shadow 1px 1px 1px #000
