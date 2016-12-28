@@ -22,7 +22,7 @@ export function rotate(el) {
   addClass(el, rotateClass);
   setTimeout(() => {
     removeClass(el, rotateClass);
-  }, 5000);
+  }, 500);
 }
 
 export function mandatoryParameter() {

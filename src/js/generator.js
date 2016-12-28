@@ -238,8 +238,10 @@ export default function ({
   type = mandatoryParameter(),
   useEmojis = mandatoryParameter(),
 } = {}) {
-  const config = getConfig(count, type, useEmojis);
-  const tokens = generateTokensMultiParagraph(config);
+  return new Promise((resolve) => {
+    const config = getConfig(count, type, useEmojis);
+    const tokens = generateTokensMultiParagraph(config);
 
-  return joinWithSpaces(tokens);
+    resolve(joinWithSpaces(tokens));
+  });
 }

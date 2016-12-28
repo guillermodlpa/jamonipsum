@@ -20,13 +20,14 @@ function readUiAndGenerate() {
   const count = getCountInput().value;
   const type = getTypeInputValue();
   const useEmojis = getEmojiValue();
-  const result = generator({
+
+  generator({
     count,
     type,
     useEmojis,
-  });
-
-  renderResult(result);
+  })
+    .then(result => renderResult(result))
+  ;
 }
 
 /**
