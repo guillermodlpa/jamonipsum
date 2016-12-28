@@ -3,7 +3,12 @@ $sectionBorder=1px solid #ddd
 $desktopBreakpoint=600px
 $desktopSidebarWidth=30rem
 $desktopIpsumWidth="calc(100% - %s)" % $desktopSidebarWidth
+
+$bodyBgColor=#FFFFFF
 $sidebarBgColor=#F2EEEE
+
+$fontColor=#000000
+$subtitleColor=#777777
 
 $headerSectionHeight=8rem
 $footerSectionHeight=2.9rem
@@ -32,6 +37,7 @@ body
 	flex-direction column
 	align-items center
 	font-family $contentFontFamily
+	background-color $bodyBgColor
 
 	p
 		margin-bottom 1rem
@@ -42,7 +48,7 @@ body
 
 body
 a
-	color #000
+	color $fontColor
 
 header
 footer
@@ -61,7 +67,6 @@ footer
 #ipsum-result-container
 	flex-grow 1
 	padding 2rem
-	color #555
 	width 100%
 
 	@media screen and (min-width: $desktopBreakpoint)
@@ -113,7 +118,7 @@ h2
 	user-select none
 
 .header-sub
-	color #777
+	color $subtitleColor
 	font-style italic
 	margin-bottom 0
 
