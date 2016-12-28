@@ -1,9 +1,19 @@
 
 $sectionBorder=1px solid #ddd
 $desktopBreakpoint=600px
-$desktopSidebarWidth=39%
-$desktopIpsumWidth=(100% - $desktopSidebarWidth)
+$desktopSidebarWidth=30rem
+$desktopIpsumWidth="calc(100% - %s)" % $desktopSidebarWidth
 $sidebarBgColor=#F2EEEE
+
+$headerSectionHeight=8rem
+$footerSectionHeight=2.9rem
+
+$bigFontSize=2rem
+$medFontSize=1.2rem
+$smallFontSize=.9rem
+
+$h1FontFamily='Marko One', serif;
+$contentFontFamily='Open Sans', sans-serif
 
 @import 'reset'
 @import 'modal'
@@ -21,7 +31,7 @@ body
 	display flex
 	flex-direction column
 	align-items center
-	font-family 'Open Sans', sans-serif
+	font-family $contentFontFamily
 
 	p
 		margin-bottom 1rem
@@ -60,31 +70,40 @@ footer
 		top 0
 		width $desktopIpsumWidth
 		height 100vh
-		padding 3rem
+		padding ($headerSectionHeight+.5rem) 3rem ($footerSectionHeight+.5rem) 3rem
 		overflow auto
 
 #jamon-result
 	max-width 600px
+	min-width 66% /* for huge screens to go beyond max-width */
 	margin 0 auto
 
 header
 	padding 1rem
 	border-bottom $sectionBorder
+	text-align center
 
 header
 	@media screen and (min-width: $desktopBreakpoint)
 		padding-top 2rem
 
+		p
+			font-size $smallFontSize
+
 footer
 	padding 1rem
 	border-top $sectionBorder
 	text-align center
-	font-size .9rem
+	font-size $smallFontSize
+
+	a
+		margin 0 .1rem
 
 h1
 h2
-	font-size 2rem
-	padding 0rem 0 .9rem .2rem
+	font-family $h1FontFamily
+	font-size $bigFontSize
+	padding 0rem 0 1rem .2rem
 
 .header-logo
 	height 2rem
@@ -110,7 +129,8 @@ h2
 	@media screen and (min-width: $desktopBreakpoint)
 		flex-grow 1
 		flex-direction column
-		font-size 1.2rem
+		font-size $medFontSize
+		border-bottom 0
 
 .jamon-muticheckbox
 	display flex
@@ -124,7 +144,7 @@ h2
 #jamon-count-input
 	width 3.5rem
 	height 100%
-	font-size 1.2rem
+	font-size $medFontSize
 	padding .3rem
 	text-align center
 	background-color #f9f9f9
@@ -132,7 +152,7 @@ h2
 	border-radius 3px
 
 	@media screen and (min-width: $desktopBreakpoint)
-		font-size 2rem
+		font-size $bigFontSize
 		padding .5rem .3rem
 		width 4.5rem
 
@@ -144,14 +164,10 @@ input
 	&[type="checkbox"]
 		width 1rem
 		height 1rem
-		font-size 1.2rem
+		font-size $medFontSize
 
 	&[type="checkbox"]
 		margin-top .5rem
-
-footer
-	a
-		margin 0 .1rem
 
 input[type=number]
 	&::-webkit-inner-spin-button
