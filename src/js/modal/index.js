@@ -1,3 +1,6 @@
+/**
+ * A modal's simple implementation.
+ */
 
 import {
   addClass,

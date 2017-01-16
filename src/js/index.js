@@ -16,6 +16,9 @@ import {
 } from './dom';
 import Modal from './modal/index';
 
+/**
+ * Read input values and generate random text.
+ */
 function readUiAndGenerate() {
   const count = getCountInput().value;
   const type = getTypeInputValue();
@@ -31,11 +34,8 @@ function readUiAndGenerate() {
 }
 
 /**
- * Jamon Ipsum
- *
- * Simple code for simple purposes.
+ * Do bindings that trigger random text generation.
  */
-
 function bindGenerate() {
   const inputsHTMLCollection = getAllInputs();
   for (let i = 0; i < inputsHTMLCollection.length; i++) {
@@ -52,6 +52,9 @@ function bindGenerate() {
   }
 }
 
+/**
+ * Woah. Logo is magical.
+ */
 function bindLogo() {
   const logo = getMainLogo();
   logo.addEventListener('click', () => {
@@ -60,11 +63,12 @@ function bindLogo() {
   });
 }
 
+/**
+ * Initialize modal with extra info.
+ */
 function setUpInfoModal() {
   const modalEl = getModalEl();
-
   const modal = new Modal(modalEl, getBody());
-
   const link = getOpenModalLink();
   link.addEventListener('click', modal.open);
 }

@@ -1,3 +1,7 @@
+/**
+ * Generator of random text.
+ * Exports function that produces it.
+ */
 
 import allArticles from './fixtures/articles';
 import allConnectors from './fixtures/connectors';
@@ -6,29 +10,16 @@ import allStops from './fixtures/stops';
 import allWords from './fixtures/words';
 import {
   mandatoryParameter,
+  capitalize,
+  isEndOfSentence,
+  countWords,
+  getRandInt,
 } from './utils';
 
 const initialTokens = [
   'Jamón',
   'ipsum',
 ];
-
-function capitalize(word) {
-  return word.charAt(0).toUpperCase() + word.slice(1);
-}
-function isEndOfSentence(string) {
-  return /\.|\!/.test(string.slice(-1));
-}
-function countWords(string) {
-  const matches = string.match(/\w+/g);
-  return matches ? matches.length : 0;
-}
-function getRandInt(upperLimit, lowerLimit) {
-  if (!lowerLimit) {
-    lowerLimit = 0;
-  }
-  return lowerLimit + Math.floor(Math.random() * (upperLimit - lowerLimit + 1));
-}
 
 function getConfig(count, type, useEmojis) {
   const config = {
