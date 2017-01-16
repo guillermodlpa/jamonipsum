@@ -38,7 +38,7 @@ export default [
   'flipado',
   'mola mazo',
   'cocido',
-  'al tun tun',
+  'al tuntún',
   'fútbol',
   'más fútbol',
   'quinto pino',
