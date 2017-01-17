@@ -193,7 +193,7 @@ export default [
   'como Camarón',
   'entrañas',
   'resacón',
-  'malla de vallet',
+  'malla de ballet',
   'bailarán',
   'collección de',
   'brutal',
