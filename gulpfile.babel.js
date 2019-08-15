@@ -3,7 +3,6 @@ import gulp from 'gulp';
 import size from 'gulp-size';
 import stylus from 'gulp-stylus';
 import htmlmin from 'gulp-htmlmin';
-import gutil, { noop } from 'gulp-util';
 import rollup from 'rollup-stream';
 import rollupBabel from 'rollup-plugin-babel';
 import uglify from 'gulp-uglify';
@@ -11,6 +10,8 @@ import replace from 'gulp-replace';
 import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import del from 'del';
+import through from 'through2';
+import log from 'fancy-log';
 
 import { gaTrackingId } from './config';
 
@@ -18,7 +19,7 @@ const compileStyl = () => (
   gulp
     .src('src/css/index.styl')
     .pipe(stylus({
-      compress: !gutil.env.dev,
+      compress: true,
     }))
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
@@ -33,11 +34,11 @@ const minifyHtml = () => (
       `$1?${Math.random().toString(36).substr(2, 5)}`,
     ))
     // GA tracking ID loaded from config.
-    .pipe(!gaTrackingId ? noop() : replace(
+    .pipe(!gaTrackingId ? through.obj() : replace(
       /UA-XXXXXXXX-X/g,
       gaTrackingId,
     ))
-    .pipe(gutil.env.dev ? noop() : htmlmin({
+    .pipe(htmlmin({
       collapseWhitespace: true,
       removeComments: true,
     }))
@@ -55,10 +56,10 @@ const compileJs = () => (
       }),
     ],
   })
-    .on('error', gutil.log)
+    .on('error', log)
     .pipe(source('index.js', 'src/js'))
     .pipe(buffer())
-    .pipe(gutil.env.dev ? noop() : uglify())
+    .pipe(uglify())
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
 );
