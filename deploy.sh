@@ -8,7 +8,7 @@ find . ! -name '.gitkeep' -type f -exec rm -f {} +
 cd ..
 
 # Build assets
-./node_modules/gulp/bin/gulp.js default
+./node_modules/gulp/bin/gulp.js build
 
 # Initialize git repo and commit
 cd dist

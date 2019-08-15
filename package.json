@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "build": "gulp build",
-    "dev": "gulp build && gulp watch"
+    "dev": "gulp build && gulp watch",
+    "deploy": "./deploy.sh"
   },
   "dependencies": {},
   "devDependencies": {
