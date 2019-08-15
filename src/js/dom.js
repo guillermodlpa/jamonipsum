@@ -32,4 +32,3 @@ export function getOpenModalLink() {
 export function getAllInputs() {
   return document.getElementsByTagName('INPUT');
 }
-

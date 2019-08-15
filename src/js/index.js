@@ -29,8 +29,7 @@ function readUiAndGenerate() {
     type,
     useEmojis,
   })
-    .then(result => renderResult(result))
-  ;
+    .then((result) => renderResult(result));
 }
 
 /**

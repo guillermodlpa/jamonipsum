@@ -85,9 +85,9 @@ function chooseTokenFromArray(array, wordsLeft, threshold, lastTokens) {
     word = array[rand];
     attempts++;
   } while (
-    lastTokens &&
-    lastTokens.indexOf(word) !== -1 && attempts < threshold &&
-    wordsLeft > countWords(word)
+    lastTokens
+    && lastTokens.indexOf(word) !== -1 && attempts < threshold
+    && wordsLeft > countWords(word)
   );
 
   return word;
@@ -99,9 +99,9 @@ function getRandomTokenFromConfig(config, {
   lastTokens = [],
 }) {
   if (
-    wordsLeft > config.lastWordsThreshold &&
-    iterationsWithoutIt >= config.minWordsInBetween &&
-    Math.random() < config.probability
+    wordsLeft > config.lastWordsThreshold
+    && iterationsWithoutIt >= config.minWordsInBetween
+    && Math.random() < config.probability
   ) {
     return chooseTokenFromArray(config.list, wordsLeft, config.repetitionThreshold, lastTokens);
   }
@@ -118,7 +118,7 @@ function capitalizeTokens(tokens) {
 
 function generateTokens(config) {
   const tokens = config.initialTokens ? config.initialTokens.slice() : [];
-  const wordLimit = config.wordLimit;
+  const { wordLimit } = config;
   let wordsAddedCount = tokens.length;
 
   const cacheData = {
@@ -147,7 +147,9 @@ function generateTokens(config) {
   const hardIterationsLimit = 1000;
 
   while (wordsAddedCount < wordLimit) {
-    const lastTokens = tokens.slice(-config.word.repetitionThreshold).map(token => (token.trim()));
+    const lastTokens = tokens
+      .slice(-config.word.repetitionThreshold)
+      .map((token) => (token.trim()));
     const wordsLeft = wordLimit - wordsAddedCount;
 
     const newTokens = [];
@@ -194,7 +196,7 @@ function generateTokensMultiParagraph(config) {
   for (let i = 0; i < config.paragraphs.length; i++) {
     const wordsInParagraph = config.paragraphs[i];
 
-    const thisConfig = Object.assign({}, config);
+    const thisConfig = { ...config };
     thisConfig.wordLimit = wordsInParagraph;
 
     if (i > 0) {

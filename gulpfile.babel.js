@@ -14,16 +14,7 @@ import del from 'del';
 
 import { gaTrackingId } from './config';
 
-/**
- * For dev:
- * $ gulp --dev
- *
- * For prod:
- * gulp
- */
-
-// Compiles styl files into css.
-gulp.task('css', () => (
+const compileStyl = () => (
   gulp
     .src('src/css/index.styl')
     .pipe(stylus({
@@ -31,10 +22,9 @@ gulp.task('css', () => (
     }))
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
-));
+);
 
-// Minifies html.
-gulp.task('html', () => (
+const minifyHtml = () => (
   gulp
     .src('src/html/index.html')
     // Hash on assets. eg: 'index.css' -> 'index.css?a1b2c3'
@@ -53,12 +43,11 @@ gulp.task('html', () => (
     }))
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
-));
+);
 
-// Transpiles and bundles js with rollup.
-gulp.task('js', () => (
+const compileJs = () => (
   rollup({
-    entry: 'src/js/index.js',
+    input: 'src/js/index.js',
     format: 'iife',
     plugins: [
       rollupBabel({
@@ -72,35 +61,35 @@ gulp.task('js', () => (
     .pipe(gutil.env.dev ? noop() : uglify())
     .pipe(size({ showFiles: true }))
     .pipe(gulp.dest('dist/'))
-));
+);
 
-// Copies assets to the dist folder.
-gulp.task('assets', () => (
+const copyAssets = () => (
   gulp
     .src('assets/**/*')
     .pipe(gulp.dest('dist/'))
-));
+);
 
-// Clears out the dist folder from any previous build.
-gulp.task('clean-dist', () => (
+const cleanDist = () => (
   del([
     'dist/**/*',
     '!dist/.gitkeep',
   ])
-));
+);
 
-// Watch task for css, js and html.
-gulp.task('watch', () => {
-  gulp.watch(['src/**/*.css', 'src/**/*.styl'], ['css']);
-  gulp.watch(['src/**/*.js', 'src/**/*.jsx'], ['js']);
-  gulp.watch('src/**/*.html', ['html']);
-});
+exports.cleanDist = gulp.task(cleanDist);
 
-// Builds all in dist. Call with --watch to start watching.
-gulp.task('default', ['clean-dist'], () => {
-  gulp.start(['html', 'js', 'css', 'assets']);
+exports.build = gulp.series(
+  cleanDist,
+  gulp.parallel(
+    minifyHtml,
+    compileJs,
+    compileStyl,
+    copyAssets,
+  ),
+);
 
-  if (gutil.env.watch || gutil.env.dev) {
-    gulp.start('watch');
-  }
-});
+exports.watch = () => {
+  gulp.watch(['src/**/*.css', 'src/**/*.styl'], compileStyl);
+  gulp.watch(['src/**/*.js', 'src/**/*.jsx'], compileJs);
+  gulp.watch('src/**/*.html', minifyHtml);
+};

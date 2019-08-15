@@ -20,14 +20,17 @@ export default class {
 
     this.bind();
   }
+
   open() {
     addClass(this.body, bodyClass);
     addClass(this.el, modalClass);
   }
+
   close() {
     removeClass(this.body, bodyClass);
     removeClass(this.el, modalClass);
   }
+
   bind() {
     const closeButtons = this.el.getElementsByClassName('modal-close');
     for (let i = 0; i < closeButtons.length; i++) {
