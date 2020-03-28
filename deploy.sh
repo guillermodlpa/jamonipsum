@@ -17,13 +17,14 @@ git add .
 git commit -m "Deployed to Github Pages"
 
 # Push to the gh-pages branch
-git push -f git@github.com:guillermodlpa/jamonipsum.git master:gh-pages
+REMOTE=$(node -p "require('../package.json').repository")
+git push -f $REMOTE master:gh-pages
 
 # Go back to project root.
 cd ..
 
 echo ""
-echo "Finished deploying."
+echo "Finished deploying to $REMOTE#gh-pages"
 
 # Giving credit to this project which helped us figure out how to do it:
 # https://github.com/x-team/unleash-styles/blob/master/deploy-ghpages.sh

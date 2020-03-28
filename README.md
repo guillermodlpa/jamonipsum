@@ -13,3 +13,17 @@ Ejemplo:
 Captura de pantalla:
 
 ![screenshot v1](https://cloud.githubusercontent.com/assets/1557348/21552977/9c52b77a-ce05-11e6-902b-76743c5ad715.png "Screenshot jamonipsum.es")
+
+## Desarrollo
+
+```
+yarn dev
+```
+
+## Despliegue
+
+Desplegar requiere permisos de escritura en el repositorio.
+
+```
+yarn deploy
+```
