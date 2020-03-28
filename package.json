@@ -1,7 +1,7 @@
 {
   "name": "jamonipsum",
   "version": "1.0.0",
-  "repository": "git@github.com:gpuenteallott/jamonipsum.git",
+  "repository": "git@github.com:guillermodlpa/jamonipsum.git",
   "author": "Guillermo de la Puente <g.puente.allott@gmail.com>",
   "license": "MIT",
   "scripts": {

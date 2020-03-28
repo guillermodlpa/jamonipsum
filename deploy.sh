@@ -17,7 +17,7 @@ git add .
 git commit -m "Deployed to Github Pages"
 
 # Push to the gh-pages branch
-git push -f git@github.com:gpuenteallott/jamonipsum.git master:gh-pages
+git push -f git@github.com:guillermodlpa/jamonipsum.git master:gh-pages
 
 # Go back to project root.
 cd ..
