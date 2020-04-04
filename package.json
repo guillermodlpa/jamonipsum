@@ -7,7 +7,8 @@
   "scripts": {
     "build": "gulp build",
     "dev": "gulp build && gulp watch",
-    "deploy": "./deploy.sh"
+    "deploy": "./deploy.sh",
+    "test": "eslint ."
   },
   "dependencies": {},
   "devDependencies": {
