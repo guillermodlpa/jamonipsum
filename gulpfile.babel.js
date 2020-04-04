@@ -2,18 +2,18 @@
 import gulp from 'gulp';
 import size from 'gulp-size';
 import stylus from 'gulp-stylus';
+import file from 'gulp-file';
 import htmlmin from 'gulp-htmlmin';
-import rollup from 'rollup-stream';
 import rollupBabel from 'rollup-plugin-babel';
 import uglify from 'gulp-uglify';
 import replace from 'gulp-replace';
-import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import del from 'del';
 import through from 'through2';
-import log from 'fancy-log';
 
 import { gaTrackingId } from './config';
+
+const rollup = require('rollup');
 
 const compileStyl = () => (
   gulp
@@ -47,21 +47,27 @@ const minifyHtml = () => (
 );
 
 const compileJs = () => (
-  rollup({
+  rollup.rollup({
     input: 'src/js/index.js',
-    format: 'iife',
     plugins: [
       rollupBabel({
         exclude: 'node_modules/**',
       }),
     ],
   })
-    .on('error', log)
-    .pipe(source('index.js', 'src/js'))
-    .pipe(buffer())
-    .pipe(uglify())
-    .pipe(size({ showFiles: true }))
-    .pipe(gulp.dest('dist/'))
+    .then((bundle) => bundle.generate({
+      format: 'umd',
+    }))
+    .then((gen) => {
+      /** @var {string} */
+      const bundleContents = gen.output[0].code;
+
+      return file('index.js', bundleContents, { src: true })
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(size({ showFiles: true }))
+        .pipe(gulp.dest('dist/'));
+    })
 );
 
 const copyAssets = () => (
