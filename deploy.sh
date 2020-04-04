@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# exit when any command fails
+set -e
+
 echo "Deploying to GitHub Pages."
 echo ""
 
@@ -8,7 +12,8 @@ find . ! -name '.gitkeep' -type f -exec rm -f {} +
 cd ..
 
 # Build assets
-./node_modules/gulp/bin/gulp.js build
+yarn test
+yarn gulp build
 
 # Initialize git repo and commit
 cd dist
