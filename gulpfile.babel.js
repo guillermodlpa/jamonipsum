@@ -7,12 +7,14 @@ import htmlmin from 'gulp-htmlmin';
 import rollupBabel from 'rollup-plugin-babel';
 import uglify from 'gulp-uglify';
 import replace from 'gulp-replace';
+import rename from 'gulp-rename';
 import buffer from 'vinyl-buffer';
 import del from 'del';
 import through from 'through2';
 
 const rollup = require('rollup');
 require('dotenv').config();
+const libraryName = require('./package.json').name;
 
 const compileSiteStyl = () => (
   gulp
@@ -21,6 +23,7 @@ const compileSiteStyl = () => (
       compress: true,
     }))
     .pipe(size({ showFiles: true }))
+    .pipe(rename('site.css'))
     .pipe(gulp.dest('dist/'))
 );
 
@@ -45,9 +48,14 @@ const minifySiteHtml = () => (
     .pipe(gulp.dest('dist/'))
 );
 
-const bundleSiteJs = () => (
+/**
+ * @param {string} entryFilePath
+ * @param {string} outputFilename
+ * @return {Promise}
+ */
+const bundleJs = (entryFilePath, outputFilename) => (
   rollup.rollup({
-    input: 'site/js/index.js',
+    input: entryFilePath,
     plugins: [
       rollupBabel({
         exclude: 'node_modules/**',
@@ -56,18 +64,22 @@ const bundleSiteJs = () => (
   })
     .then((bundle) => bundle.generate({
       format: 'umd',
+      name: libraryName,
     }))
     .then((gen) => {
       /** @var {string} */
       const bundleContents = gen.output[0].code;
 
-      return file('index.js', bundleContents, { src: true })
+      return file(outputFilename, bundleContents, { src: true })
         .pipe(buffer())
         .pipe(uglify())
         .pipe(size({ showFiles: true }))
         .pipe(gulp.dest('dist/'));
     })
 );
+
+const bundleSiteJs = () => bundleJs('site/js/index.js', 'site.js');
+const bundleLibraryJs = () => bundleJs('src/index.js', 'main.js');
 
 const copySiteAssets = () => (
   gulp
@@ -88,6 +100,7 @@ exports.build = gulp.series(
   gulp.parallel(
     minifySiteHtml,
     bundleSiteJs,
+    bundleLibraryJs,
     compileSiteStyl,
     copySiteAssets,
   ),
@@ -96,5 +109,6 @@ exports.build = gulp.series(
 exports.watch = () => {
   gulp.watch(['site/**/*.css', 'site/**/*.styl'], compileSiteStyl);
   gulp.watch(['src/**/*.js', 'site/**/*.js'], bundleSiteJs);
+  gulp.watch(['src/**/*.js'], () => bundleLibraryJs);
   gulp.watch('site/**/*.html', minifySiteHtml);
 };
