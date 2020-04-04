@@ -3,11 +3,11 @@
  * Exports function that produces it.
  */
 
-import allArticles from './fixtures/articles';
-import allConnectors from './fixtures/connectors';
-import allEmojis from './fixtures/emojis';
-import allStops from './fixtures/stops';
-import allWords from './fixtures/words';
+import allArticles from './tokens/articles';
+import allConnectors from './tokens/connectors';
+import allEmojis from './tokens/emojis';
+import allStops from './tokens/stops';
+import allWords from './tokens/words';
 
 const initialTokens = [
   'Jamón',
