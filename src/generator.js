@@ -21,6 +21,12 @@ const initialTokens = [
   'ipsum',
 ];
 
+/**
+ * @param {int} count
+ * @param {string} type
+ * @param {bool} useEmojis
+ * @return {Object}
+ */
 function getConfig(count, type, useEmojis) {
   const config = {
     initialTokens,
@@ -75,6 +81,13 @@ function getConfig(count, type, useEmojis) {
   return config;
 }
 
+/**
+ * @param {string[]} array
+ * @param {int} wordsLeft
+ * @param {int} threshold
+ * @param {string[]} lastTokens
+ * @returns {string}
+ */
 function chooseTokenFromArray(array, wordsLeft, threshold, lastTokens) {
   let rand;
   let word;
@@ -93,6 +106,15 @@ function chooseTokenFromArray(array, wordsLeft, threshold, lastTokens) {
   return word;
 }
 
+/**
+ *
+ * @param {Object} config
+ * @param {Object} param1
+ * @param {int} param1.iterationsWithoutIt
+ * @param {int} param1.wordsLeft
+ * @param {string[]} param1.lastTokens
+ * @return {string}
+ */
 function getRandomTokenFromConfig(config, {
   iterationsWithoutIt = 0,
   wordsLeft = mandatoryParameter(),
@@ -108,6 +130,10 @@ function getRandomTokenFromConfig(config, {
   return undefined;
 }
 
+/**
+ * @param {string[]} tokens
+ * @returns {string[]}
+ */
 function capitalizeTokens(tokens) {
   for (let i = 0; i < tokens.length; i++) {
     if (i === 0 || isEndOfSentence(tokens[i - 1])) {
@@ -116,6 +142,10 @@ function capitalizeTokens(tokens) {
   }
 }
 
+/**
+ * @param {Object} config
+ * @return {string[]}
+ */
 function generateTokens(config) {
   const tokens = config.initialTokens ? config.initialTokens.slice() : [];
   const { wordLimit } = config;
@@ -190,6 +220,10 @@ function generateTokens(config) {
   return tokens;
 }
 
+/**
+ * @param {Object} config
+ * @return {string}
+ */
 function generateTokensMultiParagraph(config) {
   let tokens = [];
 
@@ -212,6 +246,10 @@ function generateTokensMultiParagraph(config) {
   return tokens;
 }
 
+/**
+ * @param {string[]} tokens
+ * @returns {string}
+ */
 function joinWithSpaces(tokens) {
   let result = '';
   for (let i = 0; i < tokens.length; i++) {
@@ -226,6 +264,13 @@ function joinWithSpaces(tokens) {
   return result;
 }
 
+/**
+ * @param {Object} config
+ * @param {int} config.count
+ * @param {string} config.type
+ * @param {bool} config.useEmojis
+ * @returns {Promise}
+ */
 export default function ({
   count = mandatoryParameter(),
   type = mandatoryParameter(),

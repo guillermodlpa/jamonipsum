@@ -11,6 +11,10 @@ const bodyClass = 'is-showing-modal';
 const modalClass = 'is-visible';
 
 export default class {
+  /**
+   * @param {Node} el
+   * @param {Node} body
+   */
   constructor(el, body) {
     this.el = el;
     this.body = body;
