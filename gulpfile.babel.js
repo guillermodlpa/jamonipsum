@@ -14,7 +14,7 @@ import through from 'through2';
 const rollup = require('rollup');
 require('dotenv').config();
 
-const compileStyl = () => (
+const compileSiteStyl = () => (
   gulp
     .src('site/css/index.styl')
     .pipe(stylus({
@@ -24,7 +24,7 @@ const compileStyl = () => (
     .pipe(gulp.dest('dist/'))
 );
 
-const minifyHtml = () => (
+const minifySiteHtml = () => (
   gulp
     .src('site/html/index.html')
     // Hash on assets. eg: 'index.css' -> 'index.css?a1b2c3'
@@ -45,7 +45,7 @@ const minifyHtml = () => (
     .pipe(gulp.dest('dist/'))
 );
 
-const compileJs = () => (
+const bundleSiteJs = () => (
   rollup.rollup({
     input: 'site/js/index.js',
     plugins: [
@@ -69,9 +69,9 @@ const compileJs = () => (
     })
 );
 
-const copyAssets = () => (
+const copySiteAssets = () => (
   gulp
-    .src('assets/**/*')
+    .src('site/assets/**/*')
     .pipe(gulp.dest('dist/'))
 );
 
@@ -86,15 +86,15 @@ exports.cleanDist = gulp.task(cleanDist);
 exports.build = gulp.series(
   cleanDist,
   gulp.parallel(
-    minifyHtml,
-    compileJs,
-    compileStyl,
-    copyAssets,
+    minifySiteHtml,
+    bundleSiteJs,
+    compileSiteStyl,
+    copySiteAssets,
   ),
 );
 
 exports.watch = () => {
-  gulp.watch(['site/**/*.css', 'site/**/*.styl'], compileStyl);
-  gulp.watch(['src/**/*.js', 'site/**/*.js'], compileJs);
-  gulp.watch('site/**/*.html', minifyHtml);
+  gulp.watch(['site/**/*.css', 'site/**/*.styl'], compileSiteStyl);
+  gulp.watch(['src/**/*.js', 'site/**/*.js'], bundleSiteJs);
+  gulp.watch('site/**/*.html', minifySiteHtml);
 };
