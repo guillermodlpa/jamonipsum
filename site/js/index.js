@@ -13,7 +13,7 @@ import {
 } from './dom';
 import Modal from './modal/index';
 
-import generator from '../../src/generator';
+import jamonIpsum from '../../src/generator';
 
 /**
  * Read input values and generate random text.
@@ -23,12 +23,20 @@ function readUiAndGenerate() {
   const type = getTypeInputValue();
   const useEmojis = getEmojiValue();
 
-  generator({
+  jamonIpsum({
     count,
     type,
     useEmojis,
   })
-    .then((result) => renderResult(result));
+    .then((result) => {
+      const paragraphs = result.split(/\n/);
+      const html = [
+        '<p>',
+        paragraphs.join('</p></p>'),
+        '</p>',
+      ];
+      renderResult(html);
+    });
 }
 
 /**

@@ -8,13 +8,6 @@ import allConnectors from './fixtures/connectors';
 import allEmojis from './fixtures/emojis';
 import allStops from './fixtures/stops';
 import allWords from './fixtures/words';
-import {
-  mandatoryParameter,
-  capitalize,
-  isEndOfSentence,
-  countWords,
-  getRandInt,
-} from './utils';
 
 const initialTokens = [
   'Jamón',
@@ -22,12 +15,63 @@ const initialTokens = [
 ];
 
 /**
+ *
+ * @param {string[]} paragraph
+ * @returns {string}
+ */
+export const joinTokens = (paragraph) => paragraph
+  .reduce((memo, token, index) => {
+    if (index === 0) {
+      return `${token}`;
+    }
+    if (/^\.|,$/.test(token)) {
+      return `${memo}${token}`;
+    }
+    return `${memo} ${token}`;
+  }, '');
+
+/**
+ * @param {string} string
+ * @returns {int}
+ */
+const countWords = (value) => value.split(/\s/).filter((s) => s !== '').length;
+
+/**
+ * @param {string[]} tokens
+ * @returns {int}
+ */
+export const countWordsInTokens = (tokens) => countWords(joinTokens(tokens));
+
+/**
+ * @param {int} upperLimit
+ * @param {int} lowerLimit
+ * @returns {int}
+ */
+const getRandInt = (upperLimit, lowerLimit) => (
+  lowerLimit + Math.floor(Math.random() * (upperLimit - lowerLimit + 1))
+);
+
+/**
+ * @param {int} length
+ * @param {Function} getValue
+ * @return {Array}
+ */
+const createArray = (length, getValue) => {
+  const array = [];
+  // For some reason, I can't get methods like Array.from to work properly on the  minified code
+  for (let i = 0; i < length; i++) {
+    array[i] = getValue(i);
+  }
+  return array;
+};
+
+/**
  * @param {int} count
  * @param {string} type
  * @param {bool} useEmojis
  * @return {Object}
  */
-function getConfig(count, type, useEmojis) {
+const getConfig = (count, type, useEmojis) => {
   const config = {
     initialTokens,
     paragraphs: [],
@@ -65,21 +109,20 @@ function getConfig(count, type, useEmojis) {
       minWordsInBetween: 2,
       probability: 0.5,
       lastWordsThreshold: 2,
-      repetitionThreshold: 0,
+      repetitionThreshold: 2,
     },
   };
 
   if (type === 'words') {
     config.paragraphs[0] = count;
+  } else if (type === 'paragraphs') {
+    config.paragraphs = createArray(count, () => getRandInt(100, 50));
   } else {
-    config.paragraphs = [];
-    for (let i = 0; i < count; i++) {
-      config.paragraphs[i] = getRandInt(100, 50);
-    }
+    throw new Error(`Unknown type: ${type}`);
   }
 
   return config;
-}
+};
 
 /**
  * @param {string[]} array
@@ -88,23 +131,25 @@ function getConfig(count, type, useEmojis) {
  * @param {string[]} lastTokens
  * @returns {string}
  */
-function chooseTokenFromArray(array, wordsLeft, threshold, lastTokens) {
+const chooseTokenFromArray = (array, wordsLeft, threshold, lastTokens) => {
   let rand;
   let word;
   let attempts = 0;
 
   do {
-    rand = getRandInt(array.length - 1);
+    rand = getRandInt(array.length - 1, 0);
     word = array[rand];
     attempts++;
   } while (
-    lastTokens
-    && lastTokens.indexOf(word) !== -1 && attempts < threshold
-    && wordsLeft > countWords(word)
+    // Re-attempt to pick a word in the following conditions
+    attempts < threshold && (
+      lastTokens.includes(word)
+      || countWords(word) > wordsLeft
+    )
   );
 
   return word;
-}
+};
 
 /**
  *
@@ -113,13 +158,13 @@ function chooseTokenFromArray(array, wordsLeft, threshold, lastTokens) {
  * @param {int} param1.iterationsWithoutIt
  * @param {int} param1.wordsLeft
  * @param {string[]} param1.lastTokens
- * @return {string}
+ * @return {string|undefined}
  */
-function getRandomTokenFromConfig(config, {
+const getRandomTokenFromConfig = (config, {
   iterationsWithoutIt = 0,
-  wordsLeft = mandatoryParameter(),
+  wordsLeft = () => { throw new Error('wordsLeft is required'); },
   lastTokens = [],
-}) {
+}) => {
   if (
     wordsLeft > config.lastWordsThreshold
     && iterationsWithoutIt >= config.minWordsInBetween
@@ -128,28 +173,38 @@ function getRandomTokenFromConfig(config, {
     return chooseTokenFromArray(config.list, wordsLeft, config.repetitionThreshold, lastTokens);
   }
   return undefined;
-}
+};
+
+/**
+ * @param {string} string
+ * @returns {string}
+ */
+const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
+
+/**
+ * @param {string} string
+ * @returns {bool}
+ */
+const isEndOfSentence = (string) => /\.|!/.test(string.slice(-1));
 
 /**
  * @param {string[]} tokens
  * @returns {string[]}
  */
-function capitalizeTokens(tokens) {
-  for (let i = 0; i < tokens.length; i++) {
-    if (i === 0 || isEndOfSentence(tokens[i - 1])) {
-      tokens[i] = capitalize(tokens[i]);
-    }
-  }
-}
+const capitalizeTokens = (tokens) => tokens.map((token, i) => (
+  (i === 0 || isEndOfSentence(tokens[i - 1]))
+    ? capitalize(token)
+    : token
+));
 
 /**
  * @param {Object} config
  * @return {string[]}
  */
-function generateTokens(config) {
-  const tokens = config.initialTokens ? config.initialTokens.slice() : [];
+const generateTokens = (config) => {
+  const tokens = [...(config.initialTokens || [])];
+
   const { wordLimit } = config;
-  let wordsAddedCount = tokens.length;
 
   const cacheData = {
     word: {
@@ -166,7 +221,7 @@ function generateTokens(config) {
     },
   };
 
-  const keys = [
+  const tokenTypes = [
     'connector',
     'article',
     'word',
@@ -176,35 +231,30 @@ function generateTokens(config) {
   let iterations = 0;
   const hardIterationsLimit = 1000;
 
-  while (wordsAddedCount < wordLimit) {
+  while (countWordsInTokens(tokens) < wordLimit) {
     const lastTokens = tokens
       .slice(-config.word.repetitionThreshold)
       .map((token) => (token.trim()));
-    const wordsLeft = wordLimit - wordsAddedCount;
 
     const newTokens = [];
 
-    keys.forEach((key) => {
-      const token = getRandomTokenFromConfig(config[key], {
-        iterationsWithoutIt: cacheData[key].notUsedStreak,
-        wordsLeft,
+    tokenTypes.forEach((tokenType) => {
+      const token = getRandomTokenFromConfig(config[tokenType], {
+        iterationsWithoutIt: cacheData[tokenType].notUsedStreak,
+        wordsLeft: wordLimit - countWordsInTokens(tokens) - countWordsInTokens(newTokens),
         lastTokens,
       });
-      cacheData[key].notUsedStreak = !token ? cacheData[key].notUsedStreak + 1 : 0;
+
+      cacheData[tokenType].notUsedStreak = !token
+        ? cacheData[tokenType].notUsedStreak + 1
+        : 0;
 
       if (token) {
         newTokens.push(token);
-        cacheData[key].notUsedStreak = 0;
-      } else {
-        cacheData[key].notUsedStreak += 1;
       }
     });
 
     // Incrementing word count.
-    wordsAddedCount += newTokens.reduce((accumulator, token) => (
-      accumulator + countWords(token)
-    ), 0);
-
     tokens.push(...newTokens);
 
     iterations++;
@@ -213,56 +263,41 @@ function generateTokens(config) {
     }
   }
 
-  capitalizeTokens(tokens);
+  const capitalizedTokens = [
+    ...capitalizeTokens(tokens),
+    '.', // end of paragraph
+  ];
 
-  tokens.push('.');
-
-  return tokens;
-}
+  return capitalizedTokens;
+};
 
 /**
  * @param {Object} config
  * @return {string}
  */
-function generateTokensMultiParagraph(config) {
-  let tokens = [];
+const generateTokensMultiParagraph = (config) => {
+  const paragraphs = config.paragraphs.map((paragraphConfig, index) => {
+    const wordsInParagraph = paragraphConfig;
 
-  for (let i = 0; i < config.paragraphs.length; i++) {
-    const wordsInParagraph = config.paragraphs[i];
+    const thisConfig = {
+      ...config,
+      wordLimit: wordsInParagraph,
+      initialTokens: index === 0 ? config.initialTokens : undefined,
+    };
 
-    const thisConfig = { ...config };
-    thisConfig.wordLimit = wordsInParagraph;
-
-    if (i > 0) {
-      delete thisConfig.initialTokens;
-    }
-
-    tokens = tokens.concat(
-      '<p>',
-      generateTokens(thisConfig),
-      '</p>',
-    );
-  }
-  return tokens;
-}
+    return generateTokens(thisConfig);
+  });
+  return paragraphs;
+};
 
 /**
- * @param {string[]} tokens
- * @returns {string}
+ * @param {string[][]} paragraphs
+ * @return {string}
  */
-function joinWithSpaces(tokens) {
-  let result = '';
-  for (let i = 0; i < tokens.length; i++) {
-    const thisToken = tokens[i];
-
-    if (/^\.|,$/.test(thisToken)) {
-      result = `${result}${thisToken}`;
-    } else {
-      result = `${result} ${thisToken}`;
-    }
-  }
-  return result;
-}
+const joinTokenParagraphs = (paragraphs) => paragraphs
+  .map((paragraph) => joinTokens(paragraph))
+  .reduce((memo, paragraph) => `${memo}${paragraph}\n`, '')
+  .trim();
 
 /**
  * @param {Object} config
@@ -271,15 +306,15 @@ function joinWithSpaces(tokens) {
  * @param {bool} config.useEmojis
  * @returns {Promise}
  */
-export default function ({
-  count = mandatoryParameter(),
-  type = mandatoryParameter(),
-  useEmojis = mandatoryParameter(),
-} = {}) {
-  return new Promise((resolve) => {
+export default ({
+  count = () => { throw new Error('count is required'); },
+  type = () => { throw new Error('type is required'); },
+  useEmojis = () => { throw new Error('useEmojis is required'); },
+} = {}) => (
+  new Promise((resolve) => {
     const config = getConfig(count, type, useEmojis);
     const tokens = generateTokensMultiParagraph(config);
 
-    resolve(joinWithSpaces(tokens));
-  });
-}
+    resolve(joinTokenParagraphs(tokens));
+  })
+);

@@ -8,7 +8,7 @@
     "build": "gulp build",
     "dev": "gulp build && gulp watch",
     "deploy": "./deploy.sh",
-    "test": "eslint ."
+    "test": "eslint . && jest"
   },
   "dependencies": {},
   "devDependencies": {
@@ -19,6 +19,7 @@
     "eslint": "^6.1.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.8.2",
     "gulp": "^4.0.2",
     "gulp-copy": "^4.0.1",
     "gulp-file": "^0.4.0",
@@ -27,6 +28,7 @@
     "gulp-size": "^3.0.0",
     "gulp-stylus": "^2.7.0",
     "gulp-uglify": "^3.0.2",
+    "jest": "^25.2.7",
     "rollup": "^2.3.2",
     "rollup-plugin-babel": "^4.4.0",
     "through2": "^3.0.1",

@@ -79,7 +79,6 @@ const copyAssets = () => (
 const cleanDist = () => (
   del([
     'dist/**/*',
-    '!dist/.gitkeep',
   ])
 );
 
@@ -97,6 +96,6 @@ exports.build = gulp.series(
 
 exports.watch = () => {
   gulp.watch(['site/**/*.css', 'site/**/*.styl'], compileStyl);
-  gulp.watch(['src/**/*.js', 'site/**/*.jsx'], compileJs);
+  gulp.watch(['src/**/*.js', 'site/**/*.js'], compileJs);
   gulp.watch('site/**/*.html', minifyHtml);
 };
