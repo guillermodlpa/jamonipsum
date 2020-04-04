@@ -1,5 +1,7 @@
 # ![logo](https://cloud.githubusercontent.com/assets/1557348/21552909/1ffda86a-ce05-11e6-9dea-81ea062e7009.png "Logo") Jamón Ipsum
 
+![CircleCI](https://circleci.com/gh/guillermodlpa/jamonipsum.svg?style=shield)
+
 Generador de texto aleatorio en español. Con humor. Las contribuciones son bienvenidas.
 
 *Random text generator in Spanish. Humorous. Contributions are welcome*
