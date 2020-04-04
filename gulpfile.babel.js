@@ -11,9 +11,8 @@ import buffer from 'vinyl-buffer';
 import del from 'del';
 import through from 'through2';
 
-import { gaTrackingId } from './config';
-
 const rollup = require('rollup');
+require('dotenv').config();
 
 const compileStyl = () => (
   gulp
@@ -34,9 +33,9 @@ const minifyHtml = () => (
       `$1?${Math.random().toString(36).substr(2, 5)}`,
     ))
     // GA tracking ID loaded from config.
-    .pipe(!gaTrackingId ? through.obj() : replace(
-      /UA-XXXXXXXX-X/g,
-      gaTrackingId,
+    .pipe(!process.env.GOOGLE_ANALYTICS_TRACKING_ID ? through.obj() : replace(
+      /__GOOGLE_ANALYTICS_TRACKING_ID__/g,
+      process.env.GOOGLE_ANALYTICS_TRACKING_ID,
     ))
     .pipe(htmlmin({
       collapseWhitespace: true,
