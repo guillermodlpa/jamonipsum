@@ -1,8 +1,4 @@
 
-import generator from './generator';
-import {
-  rotate,
-} from './utils';
 import {
   getCountInput,
   getTypeInputValue,
@@ -13,8 +9,11 @@ import {
   getAllInputs,
   getOpenModalLink,
   getModalEl,
+  rotate,
 } from './dom';
 import Modal from './modal/index';
+
+import generator from '../../src/generator';
 
 /**
  * Read input values and generate random text.

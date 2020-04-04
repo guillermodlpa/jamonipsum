@@ -17,7 +17,7 @@ const rollup = require('rollup');
 
 const compileStyl = () => (
   gulp
-    .src('src/css/index.styl')
+    .src('site/css/index.styl')
     .pipe(stylus({
       compress: true,
     }))
@@ -27,7 +27,7 @@ const compileStyl = () => (
 
 const minifyHtml = () => (
   gulp
-    .src('src/html/index.html')
+    .src('site/html/index.html')
     // Hash on assets. eg: 'index.css' -> 'index.css?a1b2c3'
     .pipe(replace(
       /(\.js|\.css)\b/g,
@@ -48,7 +48,7 @@ const minifyHtml = () => (
 
 const compileJs = () => (
   rollup.rollup({
-    input: 'src/js/index.js',
+    input: 'site/js/index.js',
     plugins: [
       rollupBabel({
         exclude: 'node_modules/**',
@@ -96,7 +96,7 @@ exports.build = gulp.series(
 );
 
 exports.watch = () => {
-  gulp.watch(['src/**/*.css', 'src/**/*.styl'], compileStyl);
-  gulp.watch(['src/**/*.js', 'src/**/*.jsx'], compileJs);
-  gulp.watch('src/**/*.html', minifyHtml);
+  gulp.watch(['site/**/*.css', 'site/**/*.styl'], compileStyl);
+  gulp.watch(['src/**/*.js', 'site/**/*.jsx'], compileJs);
+  gulp.watch('site/**/*.html', minifyHtml);
 };

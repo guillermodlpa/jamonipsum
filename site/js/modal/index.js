@@ -5,7 +5,7 @@
 import {
   addClass,
   removeClass,
-} from '../utils';
+} from '../dom';
 
 const bodyClass = 'is-showing-modal';
 const modalClass = 'is-visible';
