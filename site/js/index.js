@@ -34,7 +34,7 @@ function readUiAndGenerate() {
         '<p>',
         paragraphs.join('</p></p>'),
         '</p>',
-      ];
+      ].join('');
       renderResult(html);
     });
 }
