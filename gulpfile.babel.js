@@ -72,8 +72,10 @@ const bundleJs = (entryFilePath, outputFilename) => (
 
       return file(outputFilename, bundleContents, { src: true })
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(size({ showFiles: true }))
+        .pipe(gulp.dest('dist/'))
+        .pipe(uglify())
+        .pipe(rename((path) => ({ ...path, extname: `.min${path.extname}` })))
         .pipe(gulp.dest('dist/'));
     })
 );

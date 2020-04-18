@@ -1,13 +1,25 @@
 {
   "name": "jamonipsum",
-  "version": "1.0.0",
+  "version": "1.0.0-rc1",
   "repository": "git@github.com:guillermodlpa/jamonipsum.git",
   "author": "Guillermo de la Puente <g.puente.allott@gmail.com>",
+  "description": "Generador de texto en español al tuntún inspirado en Lorem Ipsum",
+  "bugs": {
+    "url": "https://github.com/guillermodlpa/jamonipsum/issues"
+  },
+  "homepage": "https://jamonipsum.es",
   "license": "MIT",
+  "main": "dist/main.js",
+  "unpkg": "dist/main.min.js",
+  "files": [
+    "dist/main.js",
+    "dist/main.min.js"
+  ],
   "scripts": {
     "build": "gulp build",
     "dev": "gulp build && gulp watch",
     "deploy": "./deploy.sh",
+    "prepublish": "yarn run test && yarn run build",
     "test": "eslint . && jest"
   },
   "dependencies": {},
