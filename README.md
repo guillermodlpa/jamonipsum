@@ -16,16 +16,34 @@ Captura de pantalla:
 
 ![screenshot v1](https://cloud.githubusercontent.com/assets/1557348/21552977/9c52b77a-ce05-11e6-902b-76743c5ad715.png "Screenshot jamonipsum.es")
 
-## Desarrollo
+## Instalación
 
 ```
-yarn dev
+npm install jamonipsum --save
 ```
 
-## Despliegue
+## Uso
 
-Desplegar requiere permisos de escritura en el repositorio.
+```js
+const jamonipsum = require('jamonipsum');
 
+jamonipsum({
+    // número de palabras o párrafos a generar
+    count: 100,
+    // 'words' o 'paragraphs'
+    type: 'words',
+    // 👍 o 👎
+    useEmojis: false,
+})
+    .then((generatedText) => { console.log(generatedText); });
 ```
-yarn deploy
-```
+
+## Contribuir
+
+Issues y Pull Requests son más que bienvenidas.
+
+### Desarrollo local
+
+Para desarrollar con la interfaz de jamonipsum.es, utiliza `yarn dev` y abre en tu navegador el fichero generado `dist/index.html`.
+
+Para desarrollar con tests, ejectuta `yarn test --watch` or `npm run test -- --watch`.
