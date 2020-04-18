@@ -19,7 +19,7 @@ import jamonIpsum from '../../src/generator';
  * Read input values and generate random text.
  */
 function readUiAndGenerate() {
-  const count = getCountInput().value;
+  const count = parseInt(getCountInput().value, 10);
   const type = getTypeInputValue();
   const useEmojis = getEmojiValue();
 
@@ -45,12 +45,32 @@ function readUiAndGenerate() {
 function bindGenerate() {
   const inputsHTMLCollection = getAllInputs();
   for (let i = 0; i < inputsHTMLCollection.length; i++) {
-    inputsHTMLCollection[i].addEventListener('change', (e) => {
+    inputsHTMLCollection[i].addEventListener('input', (e) => {
       if (e.target.name === 'type') {
         if (e.target.value === 'words') {
           getCountInput().value = getCountInput().value * 10;
         } else {
           getCountInput().value = Math.ceil(getCountInput().value / 10);
+        }
+      }
+      if (e.target.name === 'count') {
+        // Skip rendering if we have an empty value
+        if (e.target.value === '') {
+          return;
+        }
+        const countValue = parseInt(e.target.value, 10);
+        if (Number.isNaN(countValue)) {
+          return;
+        }
+        if (countValue < e.target.min) {
+          e.target.value = e.target.min;
+        }
+        if (countValue > e.target.max) {
+          e.target.value = e.target.max;
+        }
+        // If no match, use parsed, like with with '4e3'
+        if (`${countValue}` !== countValue) {
+          e.target.value = countValue;
         }
       }
       readUiAndGenerate();
