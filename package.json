@@ -19,7 +19,7 @@
     "build": "gulp build",
     "dev": "gulp build && gulp watch",
     "deploy": "./deploy.sh",
-    "prepublish": "yarn run test && yarn run build",
+    "prepublishOnly": "yarn run test && yarn run build",
     "test": "eslint . && jest"
   },
   "dependencies": {},
