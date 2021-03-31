@@ -1,4 +1,3 @@
-
 import gulp from 'gulp';
 import size from 'gulp-size';
 import stylus from 'gulp-stylus';
