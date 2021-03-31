@@ -45,6 +45,6 @@ Issues y Pull Requests son más que bienvenidas.
 
 ### Desarrollo local
 
-Para desarrollar con la interfaz de jamonipsum.es, utiliza `yarn dev` y abre en tu navegador el fichero generado `dist/index.html`.
+Para desarrollar con la interfaz de jamonipsum.es, utiliza `npm run dev` y abre en tu navegador el fichero generado `dist/index.html`.
 
-Para desarrollar con tests, ejectuta `yarn test --watch` or `npm run test -- --watch`.
+Para desarrollar con tests, ejectuta `npm test -- --watch`.

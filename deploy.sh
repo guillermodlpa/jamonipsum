@@ -12,8 +12,8 @@ find . ! -name '.gitkeep' -type f -exec rm -f {} +
 cd ..
 
 # Build assets
-yarn test
-yarn gulp build
+npm test
+npm run build
 
 # Initialize git repo and commit
 cd dist
