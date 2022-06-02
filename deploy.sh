@@ -7,9 +7,12 @@ echo "Deploying to GitHub Pages."
 echo ""
 
 # Remove previous build files
-cd dist
-find . ! -name '.gitkeep' -type f -exec rm -f {} +
-cd ..
+if [ -d "dist" ]
+then
+    cd dist
+    find . ! -name '.gitkeep' -type f -exec rm -f {} +
+    cd ..
+fi
 
 # Build assets
 npm test
