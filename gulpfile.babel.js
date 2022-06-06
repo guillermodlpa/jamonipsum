@@ -9,7 +9,6 @@ import replace from 'gulp-replace';
 import rename from 'gulp-rename';
 import buffer from 'vinyl-buffer';
 import del from 'del';
-import through from 'through2';
 
 const rollup = require('rollup');
 require('dotenv').config();
@@ -33,11 +32,6 @@ const minifySiteHtml = () => (
     .pipe(replace(
       /(\.js|\.css)\b/g,
       `$1?${Math.random().toString(36).substr(2, 5)}`,
-    ))
-    // GA tracking ID loaded from config.
-    .pipe(!process.env.GOOGLE_ANALYTICS_TRACKING_ID ? through.obj() : replace(
-      /__GOOGLE_ANALYTICS_TRACKING_ID__/g,
-      process.env.GOOGLE_ANALYTICS_TRACKING_ID,
     ))
     .pipe(htmlmin({
       collapseWhitespace: true,
