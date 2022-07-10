@@ -17,7 +17,7 @@ $footerSectionHeight=2.9rem
 
 $bigFontSize=2.1rem
 $medFontSize=1.2rem
-$smallFontSize=.9rem
+$smallFontSize=1rem
 
 $sectionBorder=1px solid $borderColor
 
@@ -45,7 +45,7 @@ body
 
 	p
 		margin-bottom 1rem
-		line-height 1.2
+		line-height 1.25
 
 	@media screen and (min-width: $desktopBreakpoint)
 		align-items flex-start
@@ -98,7 +98,7 @@ header
 	@media screen and (min-width: $desktopBreakpoint)
 		padding-top 2rem
 
-		p
+		p, .header-sub
 			font-size $smallFontSize
 
 footer
@@ -113,7 +113,6 @@ footer
 		color $linkColor
 
 h1
-h2
 	font-family $h1FontFamily
 	padding 0rem 0 1rem .2rem
 
@@ -121,14 +120,12 @@ h1
 	font-size $bigFontSize
 	.header-logo
 		height $bigFontSize
-h2
-	font-size $medFontSize
-	.header-logo
-		height $medFontSize
-	@media screen and (min-width: $desktopBreakpoint)
-		font-size $bigFontSize
-		.header-logo
-			height $bigFontSize
+
+.modal-header
+	h1
+		font-size $medFontSize
+		@media screen and (min-width: $desktopBreakpoint)
+			font-size $bigFontSize
 
 .pointerable
 	cursor pointer
@@ -138,6 +135,9 @@ h2
 	color $subtitleColor
 	font-style italic
 	margin-bottom 0
+	font-size $medFontSize
+	font-weight normal
+	line-height 1.5
 
 #jamon-controls
 	display flex
