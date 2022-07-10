@@ -20,13 +20,17 @@ npm run build
 
 # Initialize git repo and commit
 cd dist
+
+# Create CNAME file
+echo "jamonipsum.guillermodlpa.com" > CNAME
+
 git init
 git add .
 git commit -m "Deployed to Github Pages"
 
 # Push to the gh-pages branch
 REMOTE=$(node -p "require('../package.json').repository")
-git push -f $REMOTE master:gh-pages
+git push -f $REMOTE main:gh-pages
 
 # Go back to project root.
 cd ..
